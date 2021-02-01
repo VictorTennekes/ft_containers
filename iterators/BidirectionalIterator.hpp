@@ -13,9 +13,9 @@
 #ifndef BIDIRECTIONAL_ITERATOR_HPP
 # define BIDIRECTIONAL_ITERATOR_HPP
 
-# include <Iterator.hpp>
-# include <traits.hpp>
-# include <list>
+// # include <Iterator.hpp>
+# include "../traits/traits.hpp"
+// # include <list>
 
 namespace ft {
 	template<class node, class pointer, class reference, class iterator_category = ft::bidirectional_iterator_tag>
@@ -25,7 +25,7 @@ namespace ft {
 			node* ptr;
 
 		public:
-			BidirectionalIterator(node* ptr == NULL) : ptr(ptr) {}
+			BidirectionalIterator(node* ptr = NULL) : ptr(ptr) {}
 			~BidirectionalIterator() {}
 
 			BidirectionalIterator(const BidirectionalIterator& other) {
@@ -44,7 +44,7 @@ namespace ft {
 			}
 
 			BidirectionalIterator& operator++() {
-				ptr = ptr->next;
+				this->ptr = this->ptr->next;
 				return (*this);
 			}
 
@@ -55,7 +55,7 @@ namespace ft {
 			}
 
 			BidirectionalIterator& operator--() {
-				ptr = ptr->prev;
+				this->ptr = this->ptr->prev;
 				return (*this);
 			}
 
@@ -70,11 +70,26 @@ namespace ft {
 			bool	operator==(const BidirectionalIterator& other) {
 				return (ptr == other.ptr);
 			}
+
+			bool	operator!=(const BidirectionalIterator& other) {
+				return (ptr != other.ptr);
+			}
+	};
+
+	template<class node, class pointer, class reference, class iterator_category = ft::bidirectional_iterator_tag>
+	class ReverseBidirectionalIterator : public BidirectionalIterator<node, pointer, reference, iterator_category> {
+
+		public:
+			ReverseBidirectionalIterator& operator++() {
+				this->ptr = this->ptr->prev;
+				return (*this);
+			}
+			
+			ReverseBidirectionalIterator& operator--() {
+				this->ptr = this->ptr->next;
+				return (*this);
+			}
 	};
 } // ft
 
 #endif
-
-++a
-a++
-*a++

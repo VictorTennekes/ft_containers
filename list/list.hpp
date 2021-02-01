@@ -14,7 +14,8 @@
 # define LIST_HPP
 
 # include <memory>
-# include <BidirectionalIterator.hpp>
+# include "../traits/traits.hpp"
+# include "../iterators/BidirectionalIterator.hpp"
 
 namespace ft {
 	template <class T, class Alloc = std::allocator<T> >
@@ -41,19 +42,18 @@ namespace ft {
 			};
 
 		public:
-			typedef T												value_type;
-			typedef Alloc											allocator_type;
-			typedef value_type&										reference;
-			typedef const reference									const_reference;
-			typedef value_type*										pointer;
-			typedef const pointer	 								const_pointer;
-			typedef BidirectionalIterator<node, T*, T&>				iterator;
-			typedef BidirectionalIterator<node, const T*, const T&>	const_iterator;
-			// bidirectional iterator to const value_type
-			// reverse bidirectional iterator <iterator>
-			// const reverse bidirectional iterator <iterator>#!
-			typedef ptrdiff_t										difference_type;
-			typedef size_t											size_type;
+			typedef T														value_type;
+			typedef Alloc													allocator_type;
+			typedef value_type&												reference;
+			typedef const value_type&										const_reference;
+			typedef value_type*												pointer;
+			typedef const pointer	 										const_pointer;
+			typedef BidirectionalIterator<node, T*, T&>						iterator;
+			typedef BidirectionalIterator<node, const T*, const T&>			const_iterator;
+			typedef ReverseBidirectionalIterator<node, T*, T&>				reverse_iterator;
+			typedef ReverseBidirectionalIterator<node, const T*, const T&>	const_reverse_iterator;
+			typedef ptrdiff_t												difference_type;
+			typedef size_t													size_type;
 
 		private:
 			size_type					_size;
@@ -75,7 +75,9 @@ namespace ft {
 			}
 
 			template <class InputIterator>
-			list(InputIterator first, InputIterator last, const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			list(InputIterator first, InputIterator last,
+				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result(), InputIterator>::type* == NULL,
+				const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (; first != last; first++)
@@ -85,6 +87,7 @@ namespace ft {
 			// list(const list& other) : _size(0), head(new node()), tail(new node()), alloc(other.alloc) {
 			// 	head->next = tail;
 			// 	tail->prev = head;
+			// 	for (con)
 			// }
 
 			~list() {
@@ -93,14 +96,40 @@ namespace ft {
 				delete this->tail;
 			}
 
-			void clear() {
-				size_type size = this->_size;
-				for (size_type i = 0; i < size; i++)
-					delNode();
+			// Iterators
+			iterator begin() {
+				return (iterator(head->next));
+			}
+
+			const_iterator begin() const {
+				return (const_iterator(head->next));
+			}
+
+			iterator end()  {
+				return (iterator(tail));
+			}
+
+			const_iterator end() const {
+				return (const_iterator(head->next));
+			}
+
+			reverse_iterator rbegin() {
+				return (reverse_iterator(tail->prev));
+			}
+
+			const_reverse_iterator rbegin() const {
+				return (const_reverse_iterator(tail->prev));
+			}
+
+			reverse_iterator rend() {
+				return (reverse_iterator(head));
+			}
+
+			const_reverse_iterator rend() const {
+				return (const_reverse_iterator(head));
 			}
 
 			// Capacity
-
 			bool empty() const {
 				return (!_size);
 			}
@@ -136,8 +165,14 @@ namespace ft {
 				newNode(val);
 			}
 
+			void clear() {
+				size_type size = _size;
+				for (size_type i = 0; i < size; i++)
+					delNode();
+			}
+
 		private:
-			void	delNode(size_type pos = std::numeric_limits<size_type)::max()) {
+			void	delNode(size_type pos = std::numeric_limits<size_type>::max()) {
 				node* ptr = this->head->next;
 
 				if (!this->_size)
