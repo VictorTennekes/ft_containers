@@ -16,6 +16,7 @@
 # include <memory>
 # include "../traits/traits.hpp"
 # include "../iterators/BidirectionalIterator.hpp"
+# include "../iterators/iterator_utils.hpp"
 
 namespace ft {
 	template <class T, class Alloc = std::allocator<T> >
@@ -74,21 +75,21 @@ namespace ft {
 					newNode(val, i);
 			}
 
-			template <class InputIterator>
-			list(InputIterator first, InputIterator last,
-				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result(), InputIterator>::type* == NULL,
-				const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			template<class InputIterator>
+			list(InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result,
+				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (; first != last; first++)
 					newNode(*first);
 			}
 
-			// list(const list& other) : _size(0), head(new node()), tail(new node()), alloc(other.alloc) {
-			// 	head->next = tail;
-			// 	tail->prev = head;
-			// 	for (con)
-			// }
+			list(const list& other) : _size(0), head(new node()), tail(new node()), alloc(other.alloc) {
+				head->next = tail;
+				tail->prev = head;
+				for (const_iterator it = other.begin(); it != other.end(); it++)
+					newNode(*it);
+			}
 
 			~list() {
 				clear();
@@ -161,9 +162,72 @@ namespace ft {
 
 			// Modifiers
 
+			void assign(size_type count, const T& value) {
+				clear();
+				for (size_type i = 0; i < count; i++)
+					newNode(value);
+			}
+
+			template<class InputIterator>
+			void assign(InputIterator first, InputIterator last,
+				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+				clear();
+				for (; first != last; first++)
+					newNode(*first);
+			}
+
+			void push_front(const T& val) {
+				newNode(val, 0);
+			}
+
+			void pop_front() {
+				delNode(0);
+			}
+
 			void push_back(const T& val) {
 				newNode(val);
 			}
+
+			void pop_back() {
+				delNode();
+			}
+
+			iterator insert(iterator position, const value_type& val) {
+				size_type pos = ft::distance(begin(), position);
+				return(iterator(newNode(pos, val)));
+			}
+
+			void insert(iterator position, size_type n, const value_type& val) {
+				size_type pos = ft::distance(begin(), position);
+
+				for (size_type i = 0; i < n; i++)
+					newNode(val, pos + i);
+			}
+
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last) {
+				size_type pos = ft::distance(begin(), position);
+
+				for (; first != last; first++)
+					newNode(*first, pos++);
+			}
+
+			iterator erase(iterator position) {
+				size_type pos = ft::distance(begin(), position);
+
+				delNode(pos);
+				return(++position);
+			}
+
+			iterator erase(iterator first, iterator(last)) {
+				size_type pos = ft::distance(begin(), first);
+				size_type len = ft::distance(first, last);
+				
+				for (; len > 0; len--)
+					delNode(pos);
+				return(++last);
+			}
+
 
 			void clear() {
 				size_type size = _size;

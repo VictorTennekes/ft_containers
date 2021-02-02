@@ -24,11 +24,8 @@ namespace ft {
     struct bidirectional_iterator_tag : public forward_iterator_tag {};
 
     struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-}
 
-// Enable if
-
-namespace ft {
+	// Enable if
 	template<bool B, typename T = void>
 	struct enable_if {};
  
@@ -37,10 +34,16 @@ namespace ft {
 		typedef T type;
 	};
 
+	// Is iterator
 	template<typename T>
 	struct is_iterator {
 		static const bool result = false;
-	}
+	};
+
+	template<>
+	struct is_iterator<ft::bidirectional_iterator_tag> {
+		static const bool result = true;
+	};
 }
 
 #endif

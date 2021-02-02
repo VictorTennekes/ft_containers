@@ -13,16 +13,24 @@
 #include <iostream>
 #include "list/list.hpp"
 #include "iterators/BidirectionalIterator.hpp"
+#include "iterators/iterator_utils.hpp"
+#include <list>
 
-using namespace ft;
+using namespace std;
 
 int main(void) {
-	int			nums[] = {1, 2, 3, 4, 5, 6, 7};
 	list<int>	test;
+	list<int>::iterator it1,it2;
 
-	for (size_t i = 0; i < 7; i++) {
-		test.push_back(nums[i]);
+	for (size_t i = 0; i < 9; i++) {
+		test.push_back(i);
 	}
+
+	it1 = test.begin();
+	advance(it1, 4);
+	it2 = test.begin();
+	test.erase(it2, it1);
+
 	for (list<int>::iterator it = test.begin(); it != test.end(); it++) {
 		std::cout << *it << std::endl;
 	}

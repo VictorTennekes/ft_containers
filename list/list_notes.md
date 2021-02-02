@@ -17,27 +17,27 @@
 
 ## Iterators
 
-### begin
+### begin :white_check_mark:
 
 1. iterator
 2. const_iterator
 
-### end
+### end :white_check_mark:
 
 1. iterator
 2. const_iterator
 
-### rbegin
+### rbegin :white_check_mark:
 
 1. reverse_iterator
 2. const_reverse_iterator
 
-### rend
+### rend :white_check_mark:
 
 1. reverse_iterator
 2. const_reverse_iterator
 
-## Bonus
+<!-- ## Bonus
 
 ### cbegin
 
@@ -45,7 +45,7 @@
 
 ### crbegin
 
-### crend
+### crend -->
 
 ## Capacity :white_check_mark:
 
