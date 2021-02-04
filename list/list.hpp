@@ -14,9 +14,10 @@
 # define LIST_HPP
 
 # include <memory>
-# include "../traits/traits.hpp"
-# include "../iterators/BidirectionalIterator.hpp"
-# include "../iterators/iterator_utils.hpp"
+# include <traits.hpp>
+# include <BidirectionalIterator.hpp>
+# include <iterator_utils.hpp>
+# include <utils.hpp>
 
 namespace ft {
 	template <class T, class Alloc = std::allocator<T> >
@@ -80,8 +81,9 @@ namespace ft {
 				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
-				for (; first != last; first++)
+				for (; first != last; first++) {
 					newNode(*first);
+				}
 			}
 
 			list(const list& other) : _size(0), head(new node()), tail(new node()), alloc(other.alloc) {
@@ -111,7 +113,7 @@ namespace ft {
 			}
 
 			const_iterator end() const {
-				return (const_iterator(head->next));
+				return (const_iterator(tail));
 			}
 
 			reverse_iterator rbegin() {
@@ -228,12 +230,26 @@ namespace ft {
 				return(++last);
 			}
 
+			void swap(list& x) {
+				ft::swap(head, x.head);
+				ft::swap(tail, x.tail);
+				ft::swap<size_type>(_size, x._size);
+			}
+
+			void resize(size_type n, value_type val = value_type()) {
+				while (_size > n)
+					delNode();
+				while (_size < n)
+					newNode(val);
+			}
 
 			void clear() {
 				size_type size = _size;
 				for (size_type i = 0; i < size; i++)
 					delNode();
 			}
+
+			// Operations
 
 		private:
 			void	delNode(size_type pos = std::numeric_limits<size_type>::max()) {
@@ -252,9 +268,8 @@ namespace ft {
 				delete ptr;
 			}
 
-			node*	newNode(const T& value, size_type pos = std::numeric_limits<size_type>::max()) {
-				node* ptr = this->head;
-
+			node* newNode(const T& value, size_type pos = std::numeric_limits<size_type>::max()) {
+				node *ptr = this->head;
 				for (size_type i = 0; i < pos && ptr && ptr->next != this->tail; i++)
 					ptr = ptr->next;
 				if (!ptr)
@@ -263,7 +278,7 @@ namespace ft {
 				ptr = ptr->next;
 				ptr->next->prev = ptr;
 				this->_size++;
-				return (ptr);
+				return(ptr);
 			}
 	};	
 }
