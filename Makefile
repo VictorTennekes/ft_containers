@@ -14,6 +14,7 @@ NAME		=	containers
 SRC			=	test_list
 OBJ			=	$(SRC:%.cpp=%.o)
 CPPFLAGS	=	-Wall -Wextra -Werror -pedantic -ansi -std=c++98
+# CPPFLAGS	=
 CPP			=	clang++
 
 # CONTAINERS
@@ -27,6 +28,10 @@ ifeq ($(DEBUG), 1)
 	CPPFLAGS += -g -fsanitize=address
 else ifeq ($(RELEASE), 1)
 	CPPFLAGS += -O3
+endif
+
+ifeq ($(STD), 1)
+	CPPFLAGS += -D STD_TEST
 endif
 
 all: $(CONTAINERS)

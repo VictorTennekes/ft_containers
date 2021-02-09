@@ -99,6 +99,13 @@ namespace ft {
 				delete this->tail;
 			}
 
+			list& operator=(const list& other) {
+				clear();
+				for (const_iterator it = other.begin(); it != other.end(); it++)
+					newNode(*it);
+				return(*this); 
+			}
+
 			// Iterators
 			iterator begin() {
 				return (iterator(head->next));
@@ -142,7 +149,7 @@ namespace ft {
 			}
 
 			size_type max_size() const {
-				return (alloc.max_size());
+				return (alloc.max_size() / (24 / sizeof(value_type)));
 			}
 
 			// Element access
@@ -196,7 +203,7 @@ namespace ft {
 
 			iterator insert(iterator position, const value_type& val) {
 				size_type pos = ft::distance(begin(), position);
-				return(iterator(newNode(pos, val)));
+				return(iterator(newNode(val, pos)));
 			}
 
 			void insert(iterator position, size_type n, const value_type& val) {
@@ -207,7 +214,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last) {
+			void insert(iterator position, InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
 				size_type pos = ft::distance(begin(), position);
 
 				for (; first != last; first++)
@@ -250,6 +257,46 @@ namespace ft {
 			}
 
 			// Operations
+			void splice(iterator position, list& other) {
+				size_type pos = ft::distance(begin(), position);
+				for (iterator it = other.begin(); it != other.end(); it++)
+					newNode(*it, pos++);
+				other.clear();
+			}
+
+			void splice(iterator position, list& other, iterator element) {
+				size_type pos = ft::distance(begin(), position);
+				size_type del_pos = ft::distance(other.begin(), element);
+				newNode(*element, pos);
+				other.delNode(del_pos);
+			}
+
+			void splice (iterator position, list& other, iterator first, iterator last) {
+				size_type pos = ft::distance(begin(), position);
+				for (; first != last; first++) {
+					newNode(*first, pos++);
+					other.delNode(ft::distance(other.begin(), first));
+				}
+			}
+
+			void remove (const value_type& val) {
+				for (iterator it = begin(); it != end();) {
+					if (*it == val)
+						it = erase(it);
+					else
+						it++;
+				}
+			}
+
+			template<class Predicate>
+			void	remove_if(Predicate pred) {
+				for (iterator it = begin(); it != end();) {
+					if (pred(*it))
+						it = erase(it);
+					else
+						it++;
+				}
+			}
 
 		private:
 			void	delNode(size_type pos = std::numeric_limits<size_type>::max()) {
