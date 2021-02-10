@@ -20,7 +20,7 @@
 namespace ft {
 	template<class node, class pointer, class reference, class category = ft::bidirectional_iterator_tag>
 	class BidirectionalIterator {
-		private:
+		public:
 			node* ptr;
 
 		public:
