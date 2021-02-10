@@ -222,10 +222,10 @@ namespace ft {
 			}
 
 			iterator erase(iterator position) {
-				size_type pos = ft::distance(begin(), position);
+				size_type pos = ft::distance(begin(), position++);
 
 				delNode(pos);
-				return(++position);
+				return(position);
 			}
 
 			iterator erase(iterator first, iterator(last)) {
@@ -258,25 +258,24 @@ namespace ft {
 
 			// Operations
 			void splice(iterator position, list& other) {
-				size_type pos = ft::distance(begin(), position);
-				for (iterator it = other.begin(); it != other.end(); it++)
-					newNode(*it, pos++);
-				other.clear();
+				splice(position, other, other.begin(), other.end());
 			}
 
 			void splice(iterator position, list& other, iterator element) {
-				size_type pos = ft::distance(begin(), position);
-				size_type del_pos = ft::distance(other.begin(), element);
-				newNode(*element, pos);
-				other.delNode(del_pos);
+				splice(position, other, element, ++iterator(element));
 			}
 
 			void splice (iterator position, list& other, iterator first, iterator last) {
-				size_type pos = ft::distance(begin(), position);
-				for (; first != last; first++) {
-					newNode(*first, pos++);
-					other.delNode(ft::distance(other.begin(), first));
-				}
+				if (first == last)
+					return;
+				size_type len = ft::distance(first, last);
+
+				connect(--iterator(position), first--);
+				connect(first, last--);
+				connect(last, position);
+
+				_size += len;
+				other._size -= len;
 			}
 
 			void remove (const value_type& val) {
@@ -298,7 +297,44 @@ namespace ft {
 				}
 			}
 
+			void unique() {
+				for (iterator it = begin(); it != end(); it++) {
+					for (iterator jt = ++iterator(it);jt != end(); jt++)
+						if (*it == *jt)
+							erase(jt);
+				}
+			}
+
+			template<class BinaryPredicate>
+			void unique(BinaryPredicate binary_pred) {
+				for (iterator it = begin(); it != end(); it++) {
+					for (iterator jt = ++iterator(it); jt != end(); jt++)
+						if (binary_pred(*it, *jt))
+							erase(jt);
+				}
+			}
+
+			void merge(list& other) {
+				iterator it = begin();
+				for (iterator jt = other.begin(); jt != other.end() && it != end();) {
+					if (*it < *jt)
+						it++;
+					else
+						splice(it, other, jt++);
+				}
+			}
+
+			// template<class Compare>
+			// void merge(list& other, Compare comp) {
+
+			// }
+
 		private:
+			void connect(iterator front, iterator back) {
+				front.ptr->next = back.ptr;
+				back.ptr->prev = front.ptr;
+			}
+
 			void	delNode(size_type pos = std::numeric_limits<size_type>::max()) {
 				node* ptr = this->head->next;
 
