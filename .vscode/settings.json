@@ -61,6 +61,11 @@
 		"system_error": "cpp",
 		"tuple": "cpp",
 		"typeinfo": "cpp",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"__tree": "cpp",
+		"deque": "cpp",
+		"map": "cpp",
+		"queue": "cpp",
+		"stack": "cpp"
 	}
 }

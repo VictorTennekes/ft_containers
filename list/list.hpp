@@ -358,6 +358,11 @@ namespace ft {
 				splice(begin(), right);
 			}
 
+			void reverse() {
+				for (iterator it = ++begin(); it != end();)
+					splice(begin(), *this, it++);
+			}
+
 		private:
 			void connect(iterator front, iterator back) {
 				front.ptr->next = back.ptr;

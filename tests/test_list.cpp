@@ -16,14 +16,6 @@
 #include <list.hpp>
 #include <list>
 
-#ifdef STD_TEST 
-	using namespace std;
-	#define ENV "STD"
-#else
-	using namespace ft;
-	#define ENV "FT"
-#endif
-
 #define WHITE "\033[37;01m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -33,20 +25,132 @@
 
 #define VALUE int
 
-bool is_even(int num) {return(num%2 == 0);}
+#ifdef STD_TEST 
+	using namespace std;
+	#define ENV "STD"
+	#define SIDE RED
+	#define ENVART "  █████████  ███████████ ██████████  \n\
+ ███░░░░░███░█░░░███░░░█░░███░░░░███ \n\
+░███    ░░░ ░   ░███  ░  ░███   ░░███\n\
+░░█████████     ░███     ░███    ░███\n\
+ ░░░░░░░░███    ░███     ░███    ░███\n\
+ ███    ░███    ░███     ░███    ███ \n\
+░░█████████     █████    ██████████  \n\
+ ░░░░░░░░░     ░░░░░    ░░░░░░░░░░   \n"
+#else
+	using namespace ft;
+	#define ENV "FT"
+	#define SIDE BLUE
+	#define ENVART " ███████████ ███████████\n\
+░░███░░░░░░█░█░░░███░░░█\n\
+ ░███   █ ░ ░   ░███  ░ \n\
+ ░███████       ░███    \n\
+ ░███░░░█       ░███    \n\
+ ░███  ░        ░███    \n\
+ █████          █████   \n\
+░░░░░          ░░░░░    \n"        
+#endif
+
+#define WARS " █████   ███   █████   █████████   ███████████    █████████ \n\
+░░███   ░███  ░░███   ███░░░░░███ ░░███░░░░░███  ███░░░░░███\n\
+ ░███   ░███   ░███  ░███    ░███  ░███    ░███ ░███    ░░░ \n\
+ ░███   ░███   ░███  ░███████████  ░██████████  ░░█████████ \n\
+ ░░███  █████  ███   ░███░░░░░███  ░███░░░░░███  ░░░░░░░░███\n\
+  ░░░█████░█████░    ░███    ░███  ░███    ░███  ███    ░███\n\
+    ░░███ ░░███      █████   █████ █████   █████░░█████████ \n\
+     ░░░   ░░░      ░░░░░   ░░░░░ ░░░░░   ░░░░░  ░░░░░░░░░  \n"
+
+
+void print_env() {
+	std::cout << std::endl << SIDE << ENVART << std::endl;
+	std::cout << std::endl << WARS << RESET << std::endl;
+}
+
+void print_title_saber(std::string name) {
+	int add = 0;
+	if (name.size() % 2)
+		add++;
+	int size = (50 - name.size()) / 2;
+	std::cout << "   ▁▁▁▁▁▁▁▁▁▁▁▁▁" << SIDE << " ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁" << RESET << std::endl;
+	std::cout << "|▍░▐░░▣░▒░▒░▒▕|" << std::string(size, ' ') << WHITE << name << SIDE << std::string(size + add, ' ') << "  ▌" << RESET << std::endl;
+	std::cout << "   ▔▔▔▔▔▔▔▔▔▝▔▔▔" << SIDE << " ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔" << RESET << std::endl;
+}
+
+void print_container_title_tiefighter(std::string name) {
+	int size = (6 - name.size()) / 2;
+	std::cout << WHITE << "              _              _\n";
+	std::cout << "             //              \\\n";
+	std::cout << "            /'                `\\\n";
+	std::cout << "           /,'     ..--..     `.\\\n";
+	std::cout << "          /,'   .''      ``.   `.\\\n";
+	std::cout << "         /,'   :   .----.   :   `.\\\n";
+	std::cout << "        I I   :  .'\\    /`.  :   I I\n";
+	std::cout << "        I b__:   . " << std::string(size, ' ') << SIDE << name << WHITE << std::string(size, ' ') << " .   :__d I\n";
+	std::cout << "        I p~~:   . `.__.' .   :~~q I\n";
+	std::cout << "        I I   :   ./    \\.   :   I I\n";
+	std::cout << "         \\`.   :   `----'   :   ,'/\n";
+	std::cout << "          \\`.   `..      ..'   ,'/\n";
+	std::cout << "           \\`.     ``~~''     ,'/\n";
+	std::cout << "            \\`                '/\n";
+	std::cout << "             \\               //\n";
+	std::cout << "              ~              ~\n" << RESET << std::endl;
+
+}
+
+void print_container_title_xwing(std::string name) {
+	int size = (18 - name.size()) / 2;
+	std::cout << WHITE << "                                               ____________\n";
+	std::cout << "                                --)-----------|____________|\n";
+	std::cout << "                                              ,'       ,'\n";
+	std::cout << "                -)------========            ,'  ____ ,'\n";
+	std::cout << "                         `.    `.         ,'  ,'__ ,'\n";
+	std::cout << "                           `.    `.     ,'       ,'\n";
+	std::cout << "                             `.    `._,'_______,'__\n";
+	std::cout << "                               [._ _| ^--      || |\n";
+	std::cout << "                       ____,...-----|__________ll_|\\\n";
+	std::cout << "      ,.,..-------\"\"\"\"\"     \"----'" << std::string(size, ' ') << SIDE << name << WHITE << std::string(size, ' ') << "|\n";
+	std::cout << "  .-\"\"  |=========================== ______________ |\n";
+	std::cout << "   \"-...l_______________________    |  |'      || |_]\n";
+	std::cout << "                                [`-.|__________ll_|\n";
+	std::cout << "                              ,'    ,' `.        `.\n";
+	std::cout << "                            ,'    ,'     `.    ____`.\n";
+	std::cout << "                -)---------========        `.  `.____`.\n";
+	std::cout << "                                             `.        `.\n";
+	std::cout << "                                               `.________`.\n";
+	std::cout << "                               --)-------------|___________|\n" << RESET << std::endl;
+}
+
 
 template <class Container>
 void print_container(Container& cont, std::string name) {
 	std::cout << name << " ";
-	std::cout << "[" << BLUE;
+	std::cout << "[";
 	for (typename Container::iterator it = cont.begin(); it != cont.end();)
-		std::cout << *it << (++it != cont.end() ? ", " : "");
-	std::cout << RESET << "]" << std::endl << std::endl;
+		std::cout << SIDE << *it << RESET << (++it != cont.end() ? ", " : "");
+	std::cout << "]" << std::endl << std::endl;
 }
 
+void print_container_title(std::string name) {
+	#ifdef STD_TEST
+		print_container_title_tiefighter(name);
+	#else
+		print_container_title_xwing(name);
+	#endif
+}
+
+void print_title(std::string name) {
+	int size = (50 - name.size()) / 4;
+	std::cout << std::string(50, '-') << std::endl;
+	std::cout << std::string(size * 2, ' ') << WHITE << name << RESET << std::string(size * 2, ' ') << std::endl; 
+	std::cout << std::string(50, '-') << std::endl;
+}
+
+bool is_even(int num) {return(num%2 == 0);}
+
 int main(void) {
-	std::cout << WHITE << "[" ENV "]" << RESET << std::endl;
-	std::cout << WHITE << "[ List initializers/iterators checks ]" << RESET << std::endl;
+	print_env();
+	print_container_title("List");
+	print_title_saber("List initializers/iterators checks");
 	list<VALUE>	l1;
 	
 	std::cout << "Pushing values into l1" << std::endl;
@@ -66,7 +170,7 @@ int main(void) {
 	l3 = l1;
 	print_container(l3, "List 3");
 
-	std::cout << WHITE << "[ List capacity checks ]" << RESET << std::endl;
+	print_title_saber("List capacity checks");
 	std::cout << "List 1 is: {" << (l1.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
 
 	l1.clear();
@@ -82,12 +186,12 @@ int main(void) {
 	std::cout << "List 2 has a max size of: {" << YELLOW << l2.max_size() << RESET << "}" << std::endl;
 
 	std::cout << std::endl;
-	std::cout << WHITE << "[ Element access checks ]" << RESET << std::endl;
+	print_title_saber("Element access checks");
 	std::cout << "First element of list 2: {" << l2.front() << "}" << std::endl;
 	std::cout << "Last element of list 2: {" << l2.back() << "}" << std::endl;
 	print_container(l2, "List 2");
 
-	std::cout << WHITE << "[ Modifiers checks ]" << RESET << std::endl;
+	print_title_saber("Modifiers checks");
 	std::cout << "Assign list 2 to 7 * 100" << std::endl;
 	l2.assign(7, 100);
 	print_container(l2, "List 2");
@@ -144,7 +248,8 @@ int main(void) {
 	l1.clear();
 	print_container(l1, "List 1");
 
-	std::cout << WHITE << "[ Operation checks ]" << RESET << std::endl;
+	// std::cout << WHITE << "[ Operation checks ]" << RESET << std::endl;
+	print_title_saber("Operation checks");
 	std::cout << "Pushing values into l1" << std::endl;
 	for (int i = 1; i < 11; i++)
 		l1.push_back(i * 10);
@@ -182,7 +287,7 @@ int main(void) {
 	print_container(l1, "List 1");
 
 	std::cout << "inserting values into l1" << std::endl;
-	l1.insert(l1.begin(), 420);
+	l1.insert(l1.begin(), 120);
 	l1.insert(++++++++l1.begin(), 69);
 	print_container(l1, "List 1");
 	l1.sort();
