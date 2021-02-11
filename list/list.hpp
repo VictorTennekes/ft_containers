@@ -299,8 +299,7 @@ namespace ft {
 
 			void unique() {
 				for (iterator it = begin(); it != end(); it++) {
-					for (iterator jt = ++iterator(it);jt != end(); jt++)
-						if (*it == *jt)
+					for (iterator jt = ++iterator(it); jt != end() && *it != *jt; jt++)
 							erase(jt);
 				}
 			}
@@ -308,8 +307,7 @@ namespace ft {
 			template<class BinaryPredicate>
 			void unique(BinaryPredicate binary_pred) {
 				for (iterator it = begin(); it != end(); it++) {
-					for (iterator jt = ++iterator(it); jt != end(); jt++)
-						if (binary_pred(*it, *jt))
+					for (iterator jt = ++iterator(it); jt != end() && !binary_pred(*it, *jt); jt++)
 							erase(jt);
 				}
 			}
@@ -317,17 +315,48 @@ namespace ft {
 			void merge(list& other) {
 				iterator it = begin();
 				for (iterator jt = other.begin(); jt != other.end() && it != end();) {
-					if (*it < *jt)
-						it++;
-					else
-						splice(it, other, jt++);
+					for (; *jt > *it && it != end(); it++);
+					splice(it, other, jt++);
 				}
 			}
 
-			// template<class Compare>
-			// void merge(list& other, Compare comp) {
+			template<class Compare>
+			void merge(list& other, Compare comp) {
+				iterator it = begin();
+				for (iterator jt = other.begin(); jt != other.end() && it != end();) {
+					for (; comp(*jt *it) && it != end(); it++);
+					splice(it, other, jt++);
+				}
+			}
 
-			// }
+			void sort() {
+				if (size() <= 1)
+					return ;
+				list<value_type> left;
+				list<value_type> right;
+				iterator middle = begin();
+				advance(middle, size() / 2);
+				left.splice(left.begin(), *this, begin(), middle);
+				right.splice(right.begin(), *this);
+				left.sort();
+				right.sort();
+				right.merge(left);
+				splice(begin(), right);
+			}
+			
+			template<class Compare>
+			void sort(Compare comp) {
+				if (size() <= 1)
+					return ;
+				list<value_type> left;
+				list<value_type> right;
+				iterator middle = begin();
+				advance(middle, size() / 2);
+				left.splice(left.begin(),*this, begin(), middle).sort(comp);
+				right.splice(right.begin(),*this).sort(comp);
+				right.merge(left, comp);
+				splice(begin(), right);
+			}
 
 		private:
 			void connect(iterator front, iterator back) {
