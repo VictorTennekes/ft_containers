@@ -38,7 +38,7 @@ all: $(CONTAINERS)
 
 $(CONTAINERS):
 	@echo "$(WHITE)/-----    Cleaning $(NAME)_$@     -----\\ $(RESET)"
-	$(CPP) $(CPPFLAGS) tests/test_$@.cpp -o test_$@ -I iterators -I traits -I utils -I $@
+	$(CPP) $(CPPFLAGS) tests/test_$@.cpp -o test_$@ -I iterators -I traits -I utils -I tests -I $@
 
 clean:
 	@echo "$(WHITE)/-----    Cleaning $(NAME)        -----\\ $(RESET)"

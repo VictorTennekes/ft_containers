@@ -397,7 +397,44 @@ namespace ft {
 				this->_size++;
 				return(ptr);
 			}
-	};	
+	};
+
+	template<class T, class Alloc>
+	bool operator==(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		if (lhs.size() == rhs.size())
+			return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (false);
+	}
+
+	template <class T, class Alloc>
+	bool operator!=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return !(lhs == rhs);
+	}
+	
+	template <class T, class Alloc>
+	bool operator<(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+	
+	template <class T, class Alloc>
+	bool operator<=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return !(rhs < lhs);
+	}
+	
+	template <class T, class Alloc>
+	bool operator>(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return (rhs < lhs);
+	}
+	
+	template <class T, class Alloc>
+	bool operator>=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return !(lhs < rhs);
+	}
+
+	template<class T, class Alloc>
+	void swap(list<T, Alloc>& x, list<T, Alloc>& y) {
+		x.swap(y);
+	}
 }
 
 #endif
