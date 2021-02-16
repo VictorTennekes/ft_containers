@@ -149,6 +149,10 @@ int main(void) {
 	l1.remove(100);
 	print_container(l1, "List 1");
 
+	std::cout << "Unique list 1" << std::endl;
+	l1.unique();
+	print_container(l1, "List 1");
+
 	std::cout << "Pushing uneven values into l1" << std::endl;
 	for (int i = 1; i < 11; i+=2)
 		l1.push_back(i * 11);

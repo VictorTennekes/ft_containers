@@ -299,7 +299,7 @@ namespace ft {
 
 			void unique() {
 				for (iterator it = begin(); it != end(); it++) {
-					for (iterator jt = ++iterator(it); jt != end() && *it != *jt; jt++)
+					for (iterator jt = ++iterator(it); jt != end() && *it == *jt; jt++)
 							erase(jt);
 				}
 			}
@@ -307,7 +307,7 @@ namespace ft {
 			template<class BinaryPredicate>
 			void unique(BinaryPredicate binary_pred) {
 				for (iterator it = begin(); it != end(); it++) {
-					for (iterator jt = ++iterator(it); jt != end() && !binary_pred(*it, *jt); jt++)
+					for (iterator jt = ++iterator(it); jt != end() && binary_pred(*it, *jt); jt++)
 							erase(jt);
 				}
 			}
