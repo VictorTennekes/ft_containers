@@ -18,7 +18,7 @@ CPPFLAGS	=	-Wall -Wextra -Werror -pedantic -ansi -std=c++98
 CPP			=	clang++
 
 # CONTAINERS
-CONTAINERS = list
+CONTAINERS = list vector
 
 # COLORS
 WHITE   = \x1b[37;01m
@@ -37,7 +37,7 @@ endif
 all: $(CONTAINERS)
 
 $(CONTAINERS):
-	@echo "$(WHITE)/-----    Cleaning $(NAME)_$@     -----\\ $(RESET)"
+	@echo "$(WHITE)/-----    Compiling $(NAME)_$@     -----\\ $(RESET)"
 	$(CPP) $(CPPFLAGS) tests/test_$@.cpp -o test_$@ -I iterators -I traits -I utils -I tests -I $@
 
 clean:

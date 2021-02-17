@@ -44,6 +44,11 @@ namespace ft {
 	struct is_iterator<ft::bidirectional_iterator_tag> {
 		static const bool result = true;
 	};
+
+	template<>
+	struct is_iterator<ft::random_access_iterator_tag> {
+		static const bool result = true;
+	};
 }
 
 #endif
