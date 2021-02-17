@@ -14,13 +14,14 @@
 # define LIST_HPP
 
 # include <memory>
+# include <limits>
 # include <traits.hpp>
 # include <BidirectionalIterator.hpp>
 # include <iterator_utils.hpp>
 # include <utils.hpp>
 
 namespace ft {
-	template <class T, class Alloc = std::allocator<T> >
+	template<class T, class Alloc = std::allocator<T> >
 	class list {
 		public:
 			class node {
@@ -324,7 +325,7 @@ namespace ft {
 			void merge(list& other, Compare comp) {
 				iterator it = begin();
 				for (iterator jt = other.begin(); jt != other.end() && it != end();) {
-					for (; comp(*jt *it) && it != end(); it++);
+					for (; comp(*jt, *it) && it != end(); it++);
 					splice(it, other, jt++);
 				}
 			}
