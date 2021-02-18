@@ -15,6 +15,7 @@
 
 # include <memory>
 # include <vector>
+# include <cmath>
 # include <traits.hpp>
 # include <iterator_utils.hpp>
 # include <utils.hpp>
