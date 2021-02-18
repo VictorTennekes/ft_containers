@@ -13,9 +13,7 @@
 #ifndef BIDIRECTIONAL_ITERATOR_HPP
 # define BIDIRECTIONAL_ITERATOR_HPP
 
-// # include <Iterator.hpp>
-# include "../traits/traits.hpp"
-// # include <list>
+# include <traits.hpp>
 
 namespace ft {
 	template<class node, class pointer, class reference, class category = ft::bidirectional_iterator_tag>
