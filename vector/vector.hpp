@@ -45,12 +45,12 @@ namespace ft {
 		public:
 			// Constructors / Destructors
 			explicit vector(const Alloc& alloc = Alloc()) : _size(0), _alloc(alloc) {
-				_capacity = get_capacity();
+				_capacity = calc_capacity();
 				_data =  new T[_capacity];
 			}
 
 			explicit vector(size_type n, const value_type& val = value_type(), const Alloc& alloc = Alloc()) : _size(n), _alloc(alloc) {
-				_capacity = get_capacity();
+				_capacity = calc_capacity();
 				_data = new T[_capacity];
 				for (size_type i = 0; i < n; i++)
 					_data[i] = val;
@@ -60,7 +60,7 @@ namespace ft {
 			vector(InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result,
 				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()) : _alloc(alloc) {
 				_size = ft::distance(first, last);
-				_capacity = get_capacity();
+				_capacity = calc_capacity();
 				_data = new T[_capacity];
 				for (int i = 0; first != last; first++, i++)
 					_data[i] = *first;
@@ -110,7 +110,7 @@ namespace ft {
 			}
 
 		private:
-			int get_capacity() {
+			int calc_capacity() {
 				return(pow(2, ceil(log2(_size))));
 			}
 	};

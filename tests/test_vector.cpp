@@ -18,8 +18,8 @@
 
 int main(void) {
 	print_env();
-	print_container_title("Vector");
-	print_title_saber("Vector initializers/iterators checks");
+	print_container_title("Victor");
+	print_title_saber("Victor initializers/iterators checks");
 
 	victor<VALUE> v1;
 
