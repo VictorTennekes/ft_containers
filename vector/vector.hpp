@@ -48,14 +48,14 @@ namespace ft {
 			// Constructors / Destructors
 			explicit vector(const Alloc& alloc = Alloc()) : _size(0), _alloc(alloc) {
 				_capacity = calc_capacity();
-				_data =  new T[_capacity];
+				_data = _alloc.allocate(_capacity);
 			}
 
 			explicit vector(size_type n, const value_type& val = value_type(), const Alloc& alloc = Alloc()) : _size(n), _alloc(alloc) {
 				_capacity = calc_capacity();
-				_data = new T[_capacity];
+				_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < n; i++)
-					_data[i] = val;
+					_alloc.construct(&_data[i], val);
 			}
 
 			template<class InputIterator>
@@ -63,9 +63,9 @@ namespace ft {
 				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()) : _alloc(alloc) {
 				_size = ft::distance(first, last);
 				_capacity = calc_capacity();
-				_data = new T[_capacity];
+				_data = _alloc.allocate(_capacity);
 				for (int i = 0; first != last; first++, i++)
-					_data[i] = *first;
+					_alloc.construct(&_data[i], *first);
 			}
 
 			vector(const vector& other) : _data(0), _size(0), _capacity(0), _alloc(other._alloc)  {
@@ -73,7 +73,7 @@ namespace ft {
 			}
 
 			~vector() {
-				delete [] _data;
+				_alloc.deallocate(_data, _capacity);
 			}
 
 			// Iterators
@@ -162,17 +162,43 @@ namespace ft {
 				return (_data[n]);
 			}
 
+			T& front() {
+				return(_data[0]);
+			}
+
+			const T& front() const {
+				return(_data[0]);
+			}
+
+			T& back() {
+				return(_data[_size - 1]);
+			}
+
+			const T& back() const {
+				return(_data[_size - 1]);
+			}
+
 			// Modifiers
+			template<class InputIterator>
+			void assign(InputIterator first, InputIterator last,
+					typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+				size_type len = ft::distance(first, last);
+				if (len > _capacity)
+					reallocate(len);
+				for (size_t i = 0; first != last; first++, i++)
+					_data[i] = *first;
+				_size = len;
+			}
 
 			void push_back(const value_type& val) {
 				if (_size == _capacity)
 					reallocate(_capacity * 2);
-				_data[_size] = val;
+				_alloc.construct(&_data[_size], val);
 				_size++;
 			}
 
 			void pop_back() {
-				_data[_size - 1] = T();
+				_alloc.destroy(&_data[_size - 1]);
 				_size--;
 			}
 
@@ -186,12 +212,12 @@ namespace ft {
 			}
 
 			void reallocate(size_type new_cap){
-				T* new_data = new T[new_cap];
+				T* new_data = _alloc.allocate(new_cap);
 
 				_capacity = new_cap;
 				for (size_type i = 0; i < _size; i++)
-					new_data[i] = _data[i];
-				delete [] _data;
+					_alloc.construct(&new_data[i], _data[i]);
+				_alloc.deallocate(_data, _capacity);
 				_data = new_data;
 			}
 	};

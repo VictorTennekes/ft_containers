@@ -25,8 +25,10 @@ int main(void) {
 
 	print_container(v1, "Vector 1");
 
-	v1.resize(5);
+	v1.resize(15, 15);
 
-	print_container_reverse(v1, "Vector 1 reverse");
+	v1.back() = 420;
+
+	print_container(v1, "Vector 1 reverse");
 	std::cout << "Max size: " << v1.max_size() << std::endl;
 }
