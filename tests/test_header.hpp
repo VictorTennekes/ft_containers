@@ -128,6 +128,15 @@ void print_container(Container& cont, std::string name) {
 	std::cout << "]" << std::endl << std::endl;
 }
 
+template <class Container>
+void print_container_reverse(Container& cont, std::string name) {
+	std::cout << name << " ";
+	std::cout << "[";
+	for (typename Container::reverse_iterator it = cont.rbegin(); it != cont.rend();)
+		std::cout << SIDE << *it << RESET << (++it != cont.rend() ? ", " : "");
+	std::cout << "]" << std::endl << std::endl;
+}
+
 void print_container_title(std::string name) {
 	#ifdef STD_TEST
 		print_container_title_tiefighter(name);

@@ -89,7 +89,7 @@ namespace ft {
 			}
 
 			reference operator[](int index) {
-				return *(ptr + index)
+				return *(ptr + index);
 			}
 
 			bool operator==(const RandomAccessIterator& other) {
@@ -163,7 +163,7 @@ namespace ft {
 				return(*this);
 			}
 
-			RandomAccessIterator operator--(int) {
+			ReverseRandomAccessIterator operator--(int) {
 				ReverseRandomAccessIterator old_state(*this);
 				--(*this);
 				return(old_state);
@@ -189,7 +189,7 @@ namespace ft {
 			}
 
 			reference operator[](int index) {
-				return *(ptr + index)
+				return *(ptr + index);
 			}
 
 			bool operator==(const ReverseRandomAccessIterator& other) {
