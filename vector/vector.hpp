@@ -14,12 +14,13 @@
 # define VECTOR_HPP
 
 # include <memory>
+# include <limits>
 # include <cmath>
-# include <vector>
 # include <traits.hpp>
 # include <RandomAccessIterator.hpp>
 # include <iterator_utils.hpp>
 # include <utils.hpp>
+# include <iostream>
 
 namespace ft {
 	template<class T, class Alloc = std::allocator<T> >
@@ -47,12 +48,15 @@ namespace ft {
 		public:
 			// Constructors / Destructors
 			explicit vector(const Alloc& alloc = Alloc()) : _size(0), _alloc(alloc) {
-				_capacity = calc_capacity();
+				_capacity = 1;
 				_data = _alloc.allocate(_capacity);
 			}
 
 			explicit vector(size_type n, const value_type& val = value_type(), const Alloc& alloc = Alloc()) : _size(n), _alloc(alloc) {
-				_capacity = calc_capacity();
+				if (n == 0)
+					_capacity = 1;
+				else
+					_capacity = calc_capacity();
 				_data = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < n; i++)
 					_alloc.construct(&_data[i], val);
@@ -186,8 +190,16 @@ namespace ft {
 				if (len > _capacity)
 					reallocate(len);
 				for (size_t i = 0; first != last; first++, i++)
-					_data[i] = *first;
+					_alloc.construct(&_data[i], *first);
 				_size = len;
+			}
+
+			void assign(size_type n, const value_type& val) {
+				if (n > _capacity)
+					reallocate(n);
+				for (size_t i = 0; i < n; i++)
+					_alloc.construct(&_data[i], val);
+				_size = n;
 			}
 
 			void push_back(const value_type& val) {
@@ -202,6 +214,36 @@ namespace ft {
 				_size--;
 			}
 
+			iterator insert(iterator position, const value_type& val) {
+				size_type pos = ft::distance(begin(), position);
+				reallocate(_size + 1, pos, 1);
+				_alloc.construct(&_data[pos], val);
+				_size++;
+				return(iterator(_data + pos));
+			}
+
+			void insert(iterator position, size_type n, const value_type& val) {
+				size_type pos = ft::distance(begin(), position);
+				
+				
+				reallocate(_size + n, pos, n);
+				for (size_type i = pos; i < pos + n; i++)
+					_alloc.construct(&_data[i], val);
+				_size += n;
+			}
+
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last,
+				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+				size_type pos = ft::distance(begin(), position);
+				size_type n = ft::distance(first, last);
+				
+				reallocate(_size + n, pos, n);
+				for (; first != last; pos++, first++)
+					_alloc.construct(&_data[pos], *first);
+				_size += n;
+			}
+
 		private:
 			int calc_capacity() {
 				return(pow(2, ceil(log2(_size))));
@@ -211,12 +253,16 @@ namespace ft {
 				return(pow(2, ceil(log2(size))));
 			}
 
-			void reallocate(size_type new_cap){
+			void reallocate(size_type new_cap, size_type pos = std::string::npos, size_type gap = 0) {
 				T* new_data = _alloc.allocate(new_cap);
 
 				_capacity = new_cap;
-				for (size_type i = 0; i < _size; i++)
+				size_type i = 0;
+				for (; i < pos && i < _size; i++)
 					_alloc.construct(&new_data[i], _data[i]);
+				size_type j = pos + gap;
+				for (; i < _size; i++, j++)
+					_alloc.construct(&new_data[j], _data[i]);
 				_alloc.deallocate(_data, _capacity);
 				_data = new_data;
 			}
