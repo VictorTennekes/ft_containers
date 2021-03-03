@@ -84,6 +84,11 @@ int main(void) {
 	l2.pop_back();
 	print_container(l2, "List 2");
 	
+	std::cout << "Insert {101, 102, 103} at begin of l2" << std::endl;
+	int myarr[] = {101, 102, 103};
+	l2.insert(l2.begin(), myarr, myarr+3);
+	print_container(l2, "List 2");
+
 	std::cout << "Insert 3 * 98 at ++begin of l2" << std::endl;
 	l2.insert(++l2.begin(), 3, 98);
 	print_container(l2, "List 2");

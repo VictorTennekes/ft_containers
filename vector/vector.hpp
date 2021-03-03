@@ -21,6 +21,7 @@
 # include <iterator_utils.hpp>
 # include <utils.hpp>
 # include <iostream>
+# include <type_traits>
 
 namespace ft {
 	template<class T, class Alloc = std::allocator<T> >
@@ -63,8 +64,8 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			vector(InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result,
-				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()) : _alloc(alloc) {
+			vector(InputIterator first, InputIterator last,
+				typename iterator_traits<InputIterator>::type* = 0, const Alloc& alloc = Alloc()) : _alloc(alloc) {
 				_size = ft::distance(first, last);
 				_capacity = calc_capacity();
 				_data = _alloc.allocate(_capacity);
@@ -185,7 +186,7 @@ namespace ft {
 			// Modifiers
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last,
-					typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+					typename iterator_traits<InputIterator>::type* = 0) {
 				size_type len = ft::distance(first, last);
 				if (len > _capacity)
 					reallocate(len);
@@ -234,7 +235,7 @@ namespace ft {
 
 			template<class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last,
-				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+				typename iterator_traits<InputIterator>::type* = 0) {
 				size_type pos = ft::distance(begin(), position);
 				size_type n = ft::distance(first, last);
 				

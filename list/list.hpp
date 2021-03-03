@@ -78,8 +78,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			list(InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result,
-				InputIterator>::type* = NULL, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			list(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (; first != last; first++) {
@@ -179,8 +178,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			void assign(InputIterator first, InputIterator last,
-				typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+			void assign(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0) {
 				clear();
 				for (; first != last; first++)
 					newNode(*first);
@@ -215,7 +213,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last, typename enable_if<is_iterator<typename InputIterator::iterator_category>::result, InputIterator>::type* = NULL) {
+			void insert(iterator position, InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0) {
 				size_type pos = ft::distance(begin(), position);
 
 				for (; first != last; first++)

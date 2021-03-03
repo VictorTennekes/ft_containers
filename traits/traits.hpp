@@ -24,26 +24,29 @@ namespace ft {
 	// Enable if
 	template<bool B, typename T = void>
 	struct enable_if {};
- 
-	template<typename T>
-	struct enable_if<true, T> {
-		typedef T type;
+ 	template<typename T>
+	struct enable_if<true, T> { typedef T type; };
+
+	template<class T>
+	struct has_iterator_category {
+		private:
+			typedef char	true_type;
+			typedef int		false_type;
+
+			template<class U>
+				static true_type	_test(typename U::iterator_category* = 0);
+			template<class U>
+				static false_type	_test(...);
+		public:
+			static const bool result = (sizeof(true_type) == sizeof(_test<T>(0)));
 	};
 
-	// Is iterator
 	template<typename T>
-	struct is_iterator {
-		static const bool result = false;
-	};
-	
-	template<>
-	struct is_iterator<ft::bidirectional_iterator_tag> {
-		static const bool result = true;
-	};
+	struct iterator_traits : public enable_if<has_iterator_category<T>::result, T> {};
 
-	template<>
-	struct is_iterator<ft::random_access_iterator_tag> {
-		static const bool result = true;
+	template<typename T>
+	struct iterator_traits<T*> {
+		typedef random_access_iterator_tag type;
 	};
 }
 
