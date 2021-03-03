@@ -34,31 +34,52 @@
 // 	std::cout << "Max size: " << v1.max_size() << std::endl;
 // }
 
+// int main ()
+// {
+// 	vector<int> myvector (3,100);
+// 	vector<int>::iterator it;
+
+// 	it = myvector.begin();
+// 	it = myvector.insert ( it , 200 );
+
+// 	myvector.insert (it,2,300);
+
+// 	// "it" no longer valid, get a new one:
+// 	it = myvector.begin();
+
+// 	vector<int> anothervector (2,400);
+// 	myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+// 	vector<int> myvector2;
+
+// 	int myarr[] = {101, 102, 103};
+// 	myvector.insert (myvector.begin(), myarr, myarr+3);
+
+// 	std::cout << "myvector contains:";
+// 	for (it=myvector.begin(); it<myvector.end(); it++)
+// 		std::cout << ' ' << *it;
+// 	std::cout << '\n';
+
+// 	return 0;
+// }
+
 int main ()
 {
-	vector<int> myvector (3,100);
-	vector<int>::iterator it;
+  vector<int> myvector;
 
-	it = myvector.begin();
-	it = myvector.insert ( it , 200 );
+  // set some values (from 1 to 10)
+  for (int i=1; i<=10; i++) myvector.push_back(i);
 
-	myvector.insert (it,2,300);
+  // erase the 6th element
+  myvector.erase (myvector.begin()+5);
 
-	// "it" no longer valid, get a new one:
-	it = myvector.begin();
+//   erase the first 3 elements:
+  myvector.erase (myvector.begin(),myvector.begin()+3);
 
-	vector<int> anothervector (2,400);
-	myvector.insert (it+2,anothervector.begin(),anothervector.end());
+  std::cout << "myvector contains:";
+  for (unsigned i=0; i<myvector.size(); ++i)
+    std::cout << ' ' << myvector[i];
+  std::cout << '\n';
 
-	vector<int> myvector2;
-
-	int myarr[] = {101, 102, 103};
-	myvector.insert (myvector.begin(), myarr, myarr+3);
-
-	std::cout << "myvector contains:";
-	for (it=myvector.begin(); it<myvector.end(); it++)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
-
-	return 0;
+  return 0;
 }

@@ -245,6 +245,35 @@ namespace ft {
 				_size += n;
 			}
 
+			iterator erase(iterator position) {
+				size_type pos = ft::distance(begin(), position);
+
+				if (pos > _size)
+					throw std::out_of_range("out of range");
+				reallocate(_size - 1, pos, 1, true);
+				return(begin() + pos);
+			}
+
+			iterator erase(iterator first, iterator last) {
+				size_type pos = ft::distance(begin(), first);
+				size_type gap = ft::distance(first, last);
+
+				if (pos > _size)
+					throw std::out_of_range("out of range");
+				reallocate(_size - gap, pos, gap, true);
+				return(begin() + pos);
+			}
+
+			void swap(vector& x) {
+				ft::swap(_data, x._data);
+				ft::swap(_size, x._size);
+				ft::swap(_capacity, x._capacity);
+			}
+
+			void clear() {
+				reallocate(0);
+			}
+
 		private:
 			int calc_capacity() {
 				return(pow(2, ceil(log2(_size))));
@@ -254,18 +283,21 @@ namespace ft {
 				return(pow(2, ceil(log2(size))));
 			}
 
-			void reallocate(size_type new_cap, size_type pos = std::string::npos, size_type gap = 0) {
-				T* new_data = _alloc.allocate(new_cap);
+			void reallocate(size_type new_cap, size_type pos = std::string::npos, size_type gap = 0, bool erase = false) {
+				T*			new_data = _alloc.allocate(new_cap);
+				size_type	j = pos;
 
 				_capacity = new_cap;
 				size_type i = 0;
 				for (; i < pos && i < _size; i++)
 					_alloc.construct(&new_data[i], _data[i]);
-				size_type j = pos + gap;
+				erase == true ? i += gap : j += gap;
 				for (; i < _size; i++, j++)
 					_alloc.construct(&new_data[j], _data[i]);
 				_alloc.deallocate(_data, _capacity);
 				_data = new_data;
+				if (_size > _capacity)
+					_size = _capacity;
 			}
 	};
 }
