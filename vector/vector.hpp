@@ -20,8 +20,6 @@
 # include <RandomAccessIterator.hpp>
 # include <iterator_utils.hpp>
 # include <utils.hpp>
-# include <iostream>
-# include <type_traits>
 
 namespace ft {
 	template<class T, class Alloc = std::allocator<T> >
