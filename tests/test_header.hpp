@@ -160,15 +160,15 @@ void	comparison_operator_container(Container a, Container b, std::string a_title
 	std::cout << a_title << YELLOW << " operator != " << RESET << b_title << " = " << ((a != b) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << a_title << YELLOW << " operator <  " << RESET << b_title << " = " << ((a < b) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << a_title << YELLOW << " operator <= " << RESET << b_title << " = " << ((a <= b) ? GREEN "True" : RED "False") << RESET << std::endl;
-	std::cout << a_title << YELLOW << " operator <  " << RESET << b_title << " = " << ((a > b) ? GREEN "True" : RED "False") << RESET << std::endl;
-	std::cout << a_title << YELLOW << " operator <= " << RESET << b_title << " = " << ((a >= b) ? GREEN "True" : RED "False") << RESET << std::endl;
+	std::cout << a_title << YELLOW << " operator >  " << RESET << b_title << " = " << ((a > b) ? GREEN "True" : RED "False") << RESET << std::endl;
+	std::cout << a_title << YELLOW << " operator >= " << RESET << b_title << " = " << ((a >= b) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << b_title << YELLOW << " operator == " << RESET << a_title << " = " << ((b == a) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << b_title << YELLOW << " operator != " << RESET << a_title << " = " << ((b != a) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << b_title << YELLOW << " operator <  " << RESET << a_title << " = " << ((b < a) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << b_title << YELLOW << " operator <= " << RESET << a_title << " = " << ((b <= a) ? GREEN "True" : RED "False") << RESET << std::endl;
-	std::cout << b_title << YELLOW << " operator <  " << RESET << a_title << " = " << ((b > a) ? GREEN "True" : RED "False") << RESET << std::endl;
-	std::cout << b_title << YELLOW << " operator <= " << RESET << a_title << " = " << ((b >= a) ? GREEN "True" : RED "False") << RESET << std::endl;
+	std::cout << b_title << YELLOW << " operator >  " << RESET << a_title << " = " << ((b > a) ? GREEN "True" : RED "False") << RESET << std::endl;
+	std::cout << b_title << YELLOW << " operator >= " << RESET << a_title << " = " << ((b >= a) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 }
 

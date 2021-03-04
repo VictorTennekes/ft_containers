@@ -13,6 +13,8 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+# include <vector>
+
 # include <memory>
 # include <limits>
 # include <cmath>
@@ -71,12 +73,23 @@ namespace ft {
 					_alloc.construct(&_data[i], *first);
 			}
 
-			vector(const vector& other) : _data(0), _size(0), _capacity(0), _alloc(other._alloc)  {
+			vector(const vector& other) : _data(NULL), _size(0), _capacity(0), _alloc(other._alloc) {
 				*this = other;
 			}
 
 			~vector() {
 				_alloc.deallocate(_data, _capacity);
+			}
+
+			vector& operator=(const vector& other) {
+				clear();
+				_capacity = other._capacity;
+				_size = other._size;
+				_data = _alloc.allocate(_capacity);
+				int i = 0;
+				for (const_iterator it = other.begin(); it != other.end(); i++, it++)
+					_data[i] = *it;
+				return(*this);
 			}
 
 			// Iterators
@@ -298,6 +311,43 @@ namespace ft {
 					_size = _capacity;
 			}
 	};
+
+	template<class T, class Alloc>
+	bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		if (lhs.size() == rhs.size())
+			return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return(false);
+	}
+
+	template<class T, class Alloc>
+	bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(lhs == rhs);
+	}
+
+	template<class T, class Alloc>
+	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+	
+	template<class T, class Alloc>
+	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(rhs < lhs);
+	}
+
+	template<class T, class Alloc>
+	bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return (rhs < lhs);
+	}
+
+	template<class T, class Alloc>
+	bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(lhs < rhs);
+	}
+
+	template<class T, class Alloc>
+	void swap(vector<T,Alloc>& x, vector<T,Alloc>& y) {
+		x.swap(y);
+	}
 }
 
 #endif

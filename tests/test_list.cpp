@@ -22,9 +22,11 @@ bool is_even(int num) {return(num%2 == 0);}
 int main(void) {
 	print_env();
 	print_container_title("List");
-	print_title_saber("List initializers/iterators checks");
-	list<VALUE>	l1;
 	
+	// INITIALIZERS
+	print_title_saber("List initializers/iterators checks");
+	
+	list<VALUE>	l1;
 	std::cout << "Pushing values into l1" << std::endl;
 	for (int i = 1; i < 11; i++)
 		l1.push_back(i * 10);
@@ -42,25 +44,27 @@ int main(void) {
 	l3 = l1;
 	print_container(l3, "List 3");
 
+	// CAPACITY
 	print_title_saber("List capacity checks");
 	std::cout << "List 1 is: {" << (l1.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
-
+	std::cout << "Cleared list 1" << std::endl;
 	l1.clear();
 	std::cout << "List 1 is: {" << (l1.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
 	std::cout << std::endl;
 
-	std::cout << "List 2 has a size of: {" << l2.size() << "}" << std::endl;
+	std::cout << "List 2 has a size of: {" << SIDE << l2.size() << RESET << "}" << std::endl;
 	print_container(l2, "list 2");
-	std::cout << "List 1 has a size of: {" << l1.size() << "}" << std::endl;
+	std::cout << "List 1 has a size of: {" << SIDE << l1.size() << RESET << "}" << std::endl;
 	print_container(l1, "list 1");
 
 	std::cout << "List 1 has a max size of: {" << YELLOW << l1.max_size() << RESET << "}" << std::endl;
 	std::cout << "List 2 has a max size of: {" << YELLOW << l2.max_size() << RESET << "}" << std::endl;
-
 	std::cout << std::endl;
+
+	// ACCESS
 	print_title_saber("Element access checks");
-	std::cout << "First element of list 2: {" << l2.front() << "}" << std::endl;
-	std::cout << "Last element of list 2: {" << l2.back() << "}" << std::endl;
+	std::cout << "First element of list 2: {" << SIDE << l2.front() << RESET << "}" << std::endl;
+	std::cout << "Last element of list 2: {" << SIDE << l2.back()  << RESET<< "}" << std::endl;
 	print_container(l2, "List 2");
 
 	print_title_saber("Modifiers checks");
@@ -106,8 +110,7 @@ int main(void) {
 	print_container(l2, "List 2");
 
 	list<VALUE>::iterator it = l2.begin();
-	for (unsigned long i = 1; i < l3.size(); i++)
-		it++;
+	ft::advance(it, l3.size() - 1);
 	std::cout << "Erase first " << l3.size() - 1 << " of l2" << std::endl;
 	l2.erase(l2.begin(), it);
 	print_container(l2, "List 2");
@@ -179,7 +182,4 @@ int main(void) {
 
 	print_title_saber("Operators");
 	comparison_operator_container(l2, l3, "List 2", "List 3");
-	// std::cout << "== operator:	list2 == list3 == " << ((l2 == l3) ? "True" : "False") << std::endl;
-	// std::cout << "!= operator:	list2 != list3 == " << ((l2 != l3) ? "True" : "False") << std::endl;
-	// std::cout << "List 2 " << " operator == " << "List 3" << " = " << ((l2 == l3) ? "True" : "False") << std::endl;
 }
