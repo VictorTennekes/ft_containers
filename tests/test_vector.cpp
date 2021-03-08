@@ -136,6 +136,7 @@ int main(void) {
 
 	it = v1.begin();
 	ft::advance(it, v2.size() - 1);
+	std::cout << *it << std::endl;
 	std::cout << "Erase first " << v2.size() - 1 << " of l2" << std::endl;
 	v1.erase(v1.begin(), it);
 	print_container(v1, "Victor 1");
