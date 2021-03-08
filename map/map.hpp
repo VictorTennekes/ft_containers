@@ -14,6 +14,7 @@
 # define MAP_HPP
 
 # include <memory>
+# include <limits>
 # include <utils.hpp>
 # include <BidirectionalIterator.hpp>
 # include <map>
