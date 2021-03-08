@@ -14,7 +14,6 @@
 # define RANDOM_ACCESS_ITERATOR_HPP
 
 # include <traits.hpp>
-# include <iterator>
 
 namespace ft {
 	template<class pointer, class reference, class category = ft::random_access_iterator_tag>
