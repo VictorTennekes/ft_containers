@@ -16,5 +16,9 @@
 #include <test_header.hpp>
 
 int main(void) {
-	map<int, int> test;
+	map<char, int> test;
+
+	test['a'] = 300;
+	map<char, int>::iterator it = test.find('a');
+	std::cout << it->first << std::endl;
 }
