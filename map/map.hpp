@@ -173,60 +173,10 @@ namespace ft {
 			Alloc		_alloc;
 
 		public:
-			map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()): first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
+			explicit map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()): first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
 				first->parent = last;
 				last->parent = first;
 			};
-
-			ft::pair<iterator, bool>insert(const value_type& value) {
-				iterator it = find(value.first);
-				if (it != end() && it != begin())
-					return (ft::pair<iterator, bool>(it, false));
-				if (_size == 0) {
-					root = new node(value, NULL, first, last);
-					first->parent = root;
-					last->parent = root;
-					return(ft::pair<iterator, bool>(root, true));
-				}
-				node *iter = root;
-				node *parent = NULL;
-				while (iter && iter != first && iter != last) {
-					parent = iter;
-					if (compare(value.first, iter->value.first))
-						iter = iter->left;
-					else if (compare(iter->value.first, value.first))
-						iter = iter->right;
-				}
-				iter = new node(value, parent, NULL, NULL);
-				if (last->parent == this->first || compare(iter->value.first, value.first))
-					connect_node(iter, &parent->right, this->last);
-				if (this->first->parent == this->last || compare(value.first, iter->value.first))
-					connect_node(iter, &parent->left, this->first);
-				this->_size++;
-				return (ft::pair<iterator, bool>(iterator(iter), true));
-			}
-
-			mapped_type& operator[](const key_type& k) {
-				iterator res = find(k);
-				if (res == end() || res == begin())
-					insert(value_type(k, T()).first);
-				return (res.ptr->value.second);
-			}
-
-			iterator find(const key_type& k) {
-				if (!root)
-					return(end());
-				iterator iter = iterator(root);
-				while (iter != first && iter != last) {
-					if (compare(k, iter.ptr->value.first))
-						iter = iter.ptr->left;
-					else if (compare(iter.ptr->value.first, k))
-						iter = iter.ptr->right;
-					else
-						return (iter);
-				}
-				return(end());
-			}
 
 			iterator begin() {
 				return (iterator(first->parent));
@@ -235,20 +185,115 @@ namespace ft {
 			const_iterator begin() const {
 				return (const_iterator(first->parent));
 			}
-
+			
 			iterator end() {
 				return (iterator(last));
 			}
+
 			const_iterator end() const {
-				return(const_iterator(last));
+				return (const_iterator(last));
+			}
+
+			bool empty() const {
+				return (_size == 0);
+			}
+
+			size_type size() const {
+				return (_size);
+			}
+
+			size_type max_size() const {
+				return (_alloc.max_size() / 2);
+			}
+
+			mapped_type& operator[] (const key_type& k) {
+				iterator it = find(k);
+				if (it == end() || it == iterator(first))
+					it = insert(value_type(k, T())).first;
+				return(it->second);
+			}
+
+			ft::pair<iterator, bool> insert(const value_type& val) {
+				if (empty())
+					return(ft::pair<iterator, bool>(insert_root(val), true));
+				node *iter = root;
+				node *parent = NULL;
+				while (iter && iter != first && iter != last) {
+					parent = iter;
+					if (compare(val.first, iter->value.first))
+						iter = iter->left;
+					if (compare(iter->value.first, val.first))
+						iter = iter->right;
+					else
+						return(ft::pair<iterator, bool>(iterator(iter), false));
+				}
+				node *res = new node(val, parent, NULL, NULL);
+				if (iter == first || compare(val.first, iter->value.first)) {
+					connect_node(parent, &parent->left, res);
+					connect_node(res, &res->left, iter);
+				}
+				else if (iter == last || compare(iter->value.first, val.first)) {
+					connect_node(parent, &parent->right, res);
+					connect_node(res, &res->right, iter);
+				}
+				_size++;
+				return(ft::pair<iterator, bool>(iterator(res), true));
+			}
+
+			// iterator insert(iterator position, const value_type& val) {
+			// 	if (empty())
+			// 		return(insert_root(val));
+			// 	iterator it = find(val.first);
+			// 	if (it != end())
+			// 		return(it);
+			// 	node *iter = position->ptr;
+			// 	while (iter != root) {
+			// 		if (compare(val.first, iter->value.first))
+			// 			break;
+			// 		iter = iter->parent;
+			// 	}
+			// 	if (iter == root)
+			// 		return(insert(val).first);
+			// 	iter = position->pointer;
+			// }
+
+			template<class InputIterator>
+			void insert(InputIterator first, InputIterator last) {
+				for (;first != last; first++)
+					insert(*first);
+			}
+
+			iterator find (const key_type& k) {
+				if (empty())
+					return (end());
+				node* iter = root;
+				while (iter && iter != first && iter != last) {
+					if (compare(k, iter->value.first))
+						iter = iter->left;
+					else if (compare(iter->value.first, k))
+						iter = iter->right;
+					else
+						return (iterator(iter));
+				}
+				return(end());
 			}
 
 		private:
-			void connect_node(node *child, node** parent_childptr, node *parent) {
+			void		connect_node(node *parent, node **parent_childptr, node *child) {
 				if (child)
 					child->parent = parent;
+				if ((child == first || child == last) && (parent == first || parent == last))
+					return ;
 				if (parent_childptr)
 					*parent_childptr = child;
+			}
+
+			iterator	insert_root(const value_type& val) {
+				root = new node(val, NULL, NULL, NULL);
+				connect_node(root, &root->left, first);
+				connect_node(root, &root->right, last);
+				_size++;
+				return(iterator(root));
 			}
 	};
 }
