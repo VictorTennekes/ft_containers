@@ -173,10 +173,29 @@ namespace ft {
 			Alloc		_alloc;
 
 		public:
-			explicit map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()): first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
+			explicit map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
 				first->parent = last;
 				last->parent = first;
 			};
+
+			template<class InputIterator>
+			map(InputIterator first, InputIterator last, const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
+				first->parent = last;
+				last->parent = first;
+				insert(first, last);
+			}
+			
+			map(const map& other) : first(new node()), last(new node()), root(NULL), _size(other.size), compare(other.compare), _alloc(other._alloc) {
+				first->parent = last;
+				last->parent = first;
+				*this = other;
+			}
+
+			~map() {
+				clear();
+				delete first;
+				delete last;
+			}
 
 			iterator begin() {
 				return (iterator(first->parent));
@@ -241,23 +260,6 @@ namespace ft {
 			}
 
 			iterator insert(iterator position, const value_type& val) {
-				if (empty())
-					return(insert_root(val));
-				iterator it = find(val.first);
-				if (it != end())
-					return(it);
-				node *iter = position->ptr;
-				while (iter != root) {
-					if (compare(val.first, iter->value.first))
-						break;
-					iter = iter->parent;
-				}
-				if (iter == root)
-					return(insert(val).first);
-				iter = position->pointer;
-			}
-
-			iterator insert(iterator position, const value_type& val) {
 				(void)position;
 				return(insert(val).first);
 			}
@@ -266,6 +268,24 @@ namespace ft {
 			void insert(InputIterator first, InputIterator last) {
 				for (;first != last; first++)
 					insert(*first);
+			}
+
+			void clear() {
+				for (iterator it = begin(); it != end();)
+					delete ((it++).ptr);
+				_size = 0;
+				root = NULL;
+				first->parent = last;
+				last->parent = first;
+			}
+
+			void swap(map& x) {
+				ft::swap(first, x.first);
+				ft::swap(last, x.last);
+				ft::swap(root, x.root);
+				ft::swap(_size, x._size);
+				ft::swap(compare, x.compare);
+				ft::swap(_alloc, x._alloc);
 			}
 
 			iterator find (const key_type& k) {

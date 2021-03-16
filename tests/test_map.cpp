@@ -41,22 +41,28 @@
 
 int main ()
 {
-	map<char,std::string> mymap;
+	map<char,int> mymap;
 
 	std::cout << mymap.size() << std::endl;
 	std::cout << mymap.empty() << std::endl;
 	std::cout << mymap.max_size() << std::endl;
 
-	mymap['a']="an element";
-	mymap['b']="another element";
-	mymap['c']=mymap['b'];
+	for (char it = 'a'; it <= 'z'; it++)
+		mymap[it] = (it - 96) * 100;
 
-	std::cout << "mymap['a'] is " << mymap['a'] << '\n';
-	std::cout << "mymap['b'] is " << mymap['b'] << '\n';
-	std::cout << "mymap['c'] is " << mymap['c'] << '\n';
-	std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+	for (map<char, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+		std::cout << it->first << " => " << it->second << std::endl;
 
 	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+	mymap.clear();
+	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+	
+	for (char it = 'a'; it <= 'z'; it++)
+		mymap[it] = (it - 96) * 100;
 
+	for (map<char, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+		std::cout << it->first << " => " << it->second << std::endl;
+	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+	system("leaks test_map");
 	return 0;
 }
