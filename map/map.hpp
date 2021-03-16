@@ -240,22 +240,27 @@ namespace ft {
 				return(ft::pair<iterator, bool>(iterator(res), true));
 			}
 
-			// iterator insert(iterator position, const value_type& val) {
-			// 	if (empty())
-			// 		return(insert_root(val));
-			// 	iterator it = find(val.first);
-			// 	if (it != end())
-			// 		return(it);
-			// 	node *iter = position->ptr;
-			// 	while (iter != root) {
-			// 		if (compare(val.first, iter->value.first))
-			// 			break;
-			// 		iter = iter->parent;
-			// 	}
-			// 	if (iter == root)
-			// 		return(insert(val).first);
-			// 	iter = position->pointer;
-			// }
+			iterator insert(iterator position, const value_type& val) {
+				if (empty())
+					return(insert_root(val));
+				iterator it = find(val.first);
+				if (it != end())
+					return(it);
+				node *iter = position->ptr;
+				while (iter != root) {
+					if (compare(val.first, iter->value.first))
+						break;
+					iter = iter->parent;
+				}
+				if (iter == root)
+					return(insert(val).first);
+				iter = position->pointer;
+			}
+
+			iterator insert(iterator position, const value_type& val) {
+				(void)position;
+				return(insert(val).first);
+			}
 
 			template<class InputIterator>
 			void insert(InputIterator first, InputIterator last) {
