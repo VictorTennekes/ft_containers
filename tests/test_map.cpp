@@ -60,9 +60,8 @@ int main ()
 	for (char it = 'a'; it <= 'z'; it++)
 		mymap[it] = (it - 96) * 100;
 
-	for (map<char, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+	for (map<char, int>::reverse_iterator it = mymap.rbegin(); it != mymap.rend(); it++)
 		std::cout << it->first << " => " << it->second << std::endl;
 	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
-	system("leaks test_map");
 	return 0;
 }

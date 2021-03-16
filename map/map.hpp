@@ -131,6 +131,64 @@ namespace ft {
 			}
 	};
 
+	template<class value, class pointer, class reference, class category = ft::bidirectional_iterator_tag>
+	class ReverseBidirectionalIterator {
+		public:
+			typedef ft::node<value>	node;
+			typedef category		iterator_category;
+			node	*ptr;
+
+			ReverseBidirectionalIterator(node* ptr = NULL) : ptr(ptr) {}
+			~ReverseBidirectionalIterator() {}
+
+			ReverseBidirectionalIterator(const ReverseBidirectionalIterator& other) {
+				*this = other;
+			}
+
+			ReverseBidirectionalIterator& operator=(const ReverseBidirectionalIterator& other) {
+				ptr = other.ptr;
+				return (*this);
+			}
+
+			ReverseBidirectionalIterator operator++(int) {
+				ReverseBidirectionalIterator old_state(*this);
+				++(*this);
+				return (old_state);
+			}
+
+			ReverseBidirectionalIterator& operator++() {
+				ptr = ptr->prev();
+				return (*this);
+			}
+
+			ReverseBidirectionalIterator operator--(int) {
+				ReverseBidirectionalIterator old_state(*this);
+				--(*this);
+				return (old_state);
+			}
+
+			ReverseBidirectionalIterator& operator--() {
+				ptr = ptr->next();
+				return (*this);
+			}
+
+			pointer		operator->() {
+				return (&ptr->value);
+			}
+
+			reference	operator*() {
+				return (ptr->value);
+			}
+
+			bool	operator==(const ReverseBidirectionalIterator& other) {
+				return (ptr == other.ptr);
+			}
+
+			bool	operator!=(const ReverseBidirectionalIterator& other) {
+				return (ptr != other.ptr);
+			}
+	};
+
 	template<class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 	class map {
 		public:
@@ -145,8 +203,8 @@ namespace ft {
 			typedef const value_type*									const_pointer;
 			typedef ft::BidirectionalIterator<value_type, pointer, reference> iterator;
 			typedef ft::BidirectionalIterator<value_type, const_pointer, const_reference> const_iterator;
-			// typedef ft::ReverseBidirectionalIterator<value_type, pointer, reference> reverse_iterator;
-			// typedef ft::ReverseBidirectionalIterator<value_type, const_pointer, const_reference> const_reverse_iterator;
+			typedef ft::ReverseBidirectionalIterator<value_type, pointer, reference> reverse_iterator;
+			typedef ft::ReverseBidirectionalIterator<value_type, const_pointer, const_reference> const_reverse_iterator;
 			typedef ptrdiff_t											difference_type;
 			typedef size_t												size_type;
 
@@ -211,6 +269,21 @@ namespace ft {
 
 			const_iterator end() const {
 				return (const_iterator(last));
+			}
+
+			reverse_iterator rbegin() {
+				return (reverse_iterator(last->parent));
+			}
+
+			const_reverse_iterator rbegin() const {
+				return (const_reverse_iterator(last->parent));
+			}
+
+			reverse_iterator rend() {
+				return (reverse_iterator(first));
+			}
+			const_reverse_iterator rend() const {
+				return (const_reverse_iterator(first));
 			}
 
 			bool empty() const {
