@@ -71,13 +71,13 @@ namespace ft {
 		template<class U, class V>
 		pair(const pair<U,V>& pr) : first(pr.first), second(pr.second) {};
 		pair& operator=(const pair& pr) {
-			if (this != pr) {
-				first(pr.first);
-				second(pr.second);
+			if (this != &pr) {
+				first = pr.first;
+				second = pr.second;
 			}
 			return (*this);
 		}
-
+		~pair() {}
 		T1 first;
 		T2 second;
 	};
@@ -121,7 +121,7 @@ namespace ft {
 	};
 
 	template<class T> struct less : binary_function<T, T, bool> {
-		bool operator() (const T& x, const T& y) const {return x<y;}
+		inline bool operator() (const T& x, const T& y) const {return x<y;}
 	};
 
 }

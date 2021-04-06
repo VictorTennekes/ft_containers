@@ -285,6 +285,10 @@ namespace ft {
 				reallocate(0);
 			}
 
+			allocator_type get_allocator() const {
+				return (_alloc);
+			}
+
 		private:
 			int calc_capacity() {
 				return(pow(2, ceil(log2(_size))));

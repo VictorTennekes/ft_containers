@@ -41,7 +41,7 @@ namespace ft {
 			}
 
 			BidirectionalIterator& operator++() {
-				this->ptr = this->ptr->next;
+				ptr = ptr->next;
 				return (*this);
 			}
 
@@ -52,7 +52,7 @@ namespace ft {
 			}
 
 			BidirectionalIterator& operator--() {
-				this->ptr = this->ptr->prev;
+				ptr = ptr->prev;
 				return (*this);
 			}
 
