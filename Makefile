@@ -18,8 +18,7 @@ CPPFLAGS	=	-Wall -Wextra -Werror -pedantic -ansi -std=c++98
 CPP			=	clang++
 
 # CONTAINERS
-# CONTAINERS = list vector map
-CONTAINERS = map
+CONTAINERS = list vector map
 
 # COLORS
 WHITE   = \x1b[37;01m

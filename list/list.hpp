@@ -62,15 +62,15 @@ namespace ft {
 			size_type					_size;
 			node*						head;
 			node*						tail;
-			Alloc						alloc;
+			Alloc						_alloc;
 
 		public:
-			explicit list(const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			explicit list(const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), _alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 			}
 
-			explicit list(size_type n, const T& val = T(), const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			explicit list(size_type n, const T& val = T(), const Alloc& alloc = Alloc()) : _size(0), head(new node()), tail(new node()), _alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (size_type i = 0; i < n; i++)
@@ -78,7 +78,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			list(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), alloc(alloc) {
+			list(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0, const Alloc& alloc = Alloc()): _size(0), head(new node()), tail(new node()), _alloc(alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (; first != last; first++) {
@@ -86,7 +86,7 @@ namespace ft {
 				}
 			}
 
-			list(const list& other) : _size(0), head(new node()), tail(new node()), alloc(other.alloc) {
+			list(const list& other) : _size(0), head(new node()), tail(new node()), _alloc(other.alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (const_iterator it = other.begin(); it != other.end(); it++)
@@ -149,7 +149,7 @@ namespace ft {
 			}
 
 			size_type max_size() const {
-				return (alloc.max_size() / (24 / sizeof(value_type)));
+				return (_alloc.max_size() / (24 / sizeof(value_type)));
 			}
 
 			// Element access
@@ -360,6 +360,10 @@ namespace ft {
 			void reverse() {
 				for (iterator it = ++begin(); it != end();)
 					splice(begin(), *this, it++);
+			}
+
+			allocator_type get_allocator() const {
+				return (_alloc);
 			}
 
 		private:

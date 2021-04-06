@@ -71,10 +71,6 @@ namespace ft {
 				}
 				return(iter);
 			}
-
-			void swap_value(node& x) {
-				ft::swap(value, x.value);
-			}
 	};
 
 	template<class value, class pointer, class reference, class category = ft::bidirectional_iterator_tag>
@@ -326,17 +322,17 @@ namespace ft {
 					parent = iter;
 					if (compare(val.first, iter->value.first))
 						iter = iter->left;
-					if (compare(iter->value.first, val.first))
+					else if (compare(iter->value.first, val.first))
 						iter = iter->right;
 					else
 						return(ft::pair<iterator, bool>(iterator(iter), false));
 				}
 				node *res = new node(val, parent, NULL, NULL);
-				if (iter == first || compare(val.first, iter->value.first)) {
+				if (iter == first || compare(val.first, parent->value.first)) {
 					connect_node(parent, &parent->left, res);
 					connect_node(res, &res->left, iter);
 				}
-				else if (iter == last || compare(iter->value.first, val.first)) {
+				else if (iter == last || compare(parent->value.first, val.first)) {
 					connect_node(parent, &parent->right, res);
 					connect_node(res, &res->right, iter);
 				}
@@ -356,8 +352,13 @@ namespace ft {
 			}
 
 		private:
+			void delete_node(node *pos) {
+				node **child_ptr = pos->parent->right == pos ? &pos->parent->right : &pos->parent->left;
+				*child_ptr = NULL;
+				delete(pos);
+			}
 
-			node *replacement(node *pos, bool min) {
+			node* replacement(node* pos, bool min) {
 				if (min) {
 					pos = pos->right;
 					while(pos->left)
@@ -372,14 +373,32 @@ namespace ft {
 			
 			void delete_one_child(node* pos) {
 				node **child_ptr = pos->parent->right == pos ? &pos->parent->right : &pos->parent->left;
-				connect_node(pos->parent, child_ptr, pos->right ? pos->right : pos->left);
+				node *child = pos->right ? pos->right : pos->left;
+				connect_node(pos->parent, child_ptr, child);
+				if (pos == root)
+					root = child;
 				delete (pos);
 			}
 
 			void delete_two_children(node *pos) {
 				node *rep = replacement(pos, true);
-				pos->swap_value(rep);
-				erase(iterator(rep));
+				node **child_ptr;
+				if (pos->parent)
+					child_ptr = pos->parent->right == pos ? &pos->parent->right : &pos->parent->left;
+				else
+					child_ptr = &root;
+				*child_ptr = rep;
+				ft::swap(rep->parent, pos->parent);
+				ft::swap(rep->right, pos->right);
+				ft::swap(rep->left, pos->left);
+				if (rep->right == rep)
+					rep->right = pos;
+				rep->right->parent = rep;
+				rep->left->parent = rep;
+				if (pos->left || pos->right)
+					delete_one_child(pos);
+				else 
+					delete_node(pos);
 			}
 
 		public:
@@ -393,10 +412,11 @@ namespace ft {
 				bool right_child = (pos->right != NULL);
 				if (left_child && right_child)
 					delete_two_children(pos);
-				if (left_child || right_child) {
+				else if (left_child || right_child) {
 					delete_one_child(pos);
 				} else
-					delete (pos);
+					delete_node(pos);
+				_size--;
 			}
 
 			size_type erase (const key_type& k) {
@@ -409,8 +429,9 @@ namespace ft {
 			}
 
 			void erase (iterator first, iterator last) {
-				for (; first != last; first++)
+				for (; first != last; first++) {
 					erase(first);
+				}
 			}
 
 			void swap(map& x) {
@@ -423,12 +444,7 @@ namespace ft {
 			}
 
 			void clear() {
-				for (iterator it = begin(); it != end();)
-					delete ((it++).ptr);
-				_size = 0;
-				root = NULL;
-				first->parent = last;
-				last->parent = first;
+				erase(begin(), end());
 			}
 
 			key_compare key_comp() const {
@@ -494,6 +510,10 @@ namespace ft {
 
 			ft::pair<iterator, iterator> equal_range(const key_type& k) {
 				ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+			}
+
+			allocator_type get_allocator() const {
+				return(_alloc);
 			}
 
 		private:
