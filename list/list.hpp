@@ -86,7 +86,7 @@ namespace ft {
 				}
 			}
 
-			list(const list& other) : _size(0), head(new node()), tail(new node()), _alloc(other.alloc) {
+			list(const list& other) : _size(0), head(new node()), tail(new node()), _alloc(other._alloc) {
 				head->next = tail;
 				tail->prev = head;
 				for (const_iterator it = other.begin(); it != other.end(); it++)
