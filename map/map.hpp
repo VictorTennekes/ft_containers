@@ -223,40 +223,40 @@ namespace ft {
 		
 		private:
 			typedef		ft::node<value_type> node;
-			node 		*first;
-			node 		*last;
+			node 		*head;
+			node 		*tail;
 			node		*root;
 			size_type	_size;
 			Compare		compare;
 			Alloc		_alloc;
 
 		public:
-			explicit map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
-				first->parent = last;
-				last->parent = first;
+			explicit map(const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : head(new node()), tail(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
+				head->parent = tail;
+				tail->parent = head;
 			};
 
 			template<class InputIterator>
-			map(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0, const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : first(new node()), last(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
-				first->parent = last;
-				last->parent = first;
-				insert(first, last);
+			map(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0, const Compare& compare = Compare(), const Alloc& alloc = Alloc()) : head(new node()), tail(new node()), root(NULL), _size(0), compare(compare), _alloc(alloc) {
+				head->parent = tail;
+				tail->parent = head;
+				insert(first, last);	
 			}
 			
-			map(const map& other) : first(new node()), last(new node()), root(NULL), _size(other.size), compare(other.compare), _alloc(other._alloc) {
-				first->parent = last;
-				last->parent = first;
+			map(const map& other) : head(new node()), tail(new node()), root(NULL), _size(0), compare(other.compare), _alloc(other._alloc) {
+				head->parent = tail;
+				tail->parent = head;
 				*this = other;
 			}
 
 			~map() {
 				clear();
-				delete first;
-				delete last;
+				delete head;
+				delete tail;
 			}
 
 			map& operator=(const map& other) {
-				if (this != other) {
+				if (this != &other) {
 					clear();
 					insert(other.begin(), other.end());
 				}
@@ -264,34 +264,34 @@ namespace ft {
 			}
 
 			iterator begin() {
-				return (iterator(first->parent));
+				return (iterator(head->parent));
 			}
 
 			const_iterator begin() const {
-				return (const_iterator(first->parent));
+				return (const_iterator(head->parent));
 			}
 			
 			iterator end() {
-				return (iterator(last));
+				return (iterator(tail));
 			}
 
 			const_iterator end() const {
-				return (const_iterator(last));
+				return (const_iterator(tail));
 			}
 
 			reverse_iterator rbegin() {
-				return (reverse_iterator(last->parent));
+				return (reverse_iterator(tail->parent));
 			}
 
 			const_reverse_iterator rbegin() const {
-				return (const_reverse_iterator(last->parent));
+				return (const_reverse_iterator(tail->parent));
 			}
 
 			reverse_iterator rend() {
-				return (reverse_iterator(first));
+				return (reverse_iterator(head));
 			}
 			const_reverse_iterator rend() const {
-				return (const_reverse_iterator(first));
+				return (const_reverse_iterator(head));
 			}
 
 			bool empty() const {
@@ -308,7 +308,7 @@ namespace ft {
 
 			mapped_type& operator[] (const key_type& k) {
 				iterator it = find(k);
-				if (it == end() || it == iterator(first))
+				if (it == end() || it == iterator(head))
 					it = insert(value_type(k, T())).first;
 				return(it->second);
 			}
@@ -318,7 +318,7 @@ namespace ft {
 					return(ft::pair<iterator, bool>(insert_root(val), true));
 				node *iter = root;
 				node *parent = NULL;
-				while (iter && iter != first && iter != last) {
+				while (iter && iter != head && iter != tail) {
 					parent = iter;
 					if (compare(val.first, iter->value.first))
 						iter = iter->left;
@@ -328,11 +328,11 @@ namespace ft {
 						return(ft::pair<iterator, bool>(iterator(iter), false));
 				}
 				node *res = new node(val, parent, NULL, NULL);
-				if (iter == first || compare(val.first, parent->value.first)) {
+				if (iter == head || compare(val.first, parent->value.first)) {
 					connect_node(parent, &parent->left, res);
 					connect_node(res, &res->left, iter);
 				}
-				else if (iter == last || compare(parent->value.first, val.first)) {
+				else if (iter == tail || compare(parent->value.first, val.first)) {
 					connect_node(parent, &parent->right, res);
 					connect_node(res, &res->right, iter);
 				}
@@ -429,14 +429,19 @@ namespace ft {
 			}
 
 			void erase (iterator first, iterator last) {
+				bool has_root = false;
 				for (; first != last; first++) {
+					if (first.ptr == root)
+						has_root = true;
 					erase(first);
 				}
+				if (has_root)
+					erase(iterator(root));
 			}
 
 			void swap(map& x) {
-				ft::swap(first, x.first);
-				ft::swap(last, x.last);
+				ft::swap(head, x.head);
+				ft::swap(tail, x.tail);
 				ft::swap(root, x.root);
 				ft::swap(_size, x._size);
 				ft::swap(compare, x.compare);
@@ -459,7 +464,7 @@ namespace ft {
 				if (empty())
 					return (end());
 				node* iter = root;
-				while (iter && iter != first && iter != last) {
+				while (iter && iter != head && iter != tail) {
 					if (compare(k, iter->value.first))
 						iter = iter->left;
 					else if (compare(iter->value.first, k))
@@ -520,7 +525,7 @@ namespace ft {
 			void		connect_node(node *parent, node **parent_childptr, node *child) {
 				if (child)
 					child->parent = parent;
-				if ((child == first || child == last) && (parent == first || parent == last))
+				if ((child == head || child == tail) && (parent == head || parent == tail))
 					return ;
 				if (parent_childptr)
 					*parent_childptr = child;
@@ -528,8 +533,8 @@ namespace ft {
 
 			iterator	insert_root(const value_type& val) {
 				root = new node(val, NULL, NULL, NULL);
-				connect_node(root, &root->left, first);
-				connect_node(root, &root->right, last);
+				connect_node(root, &root->left, head);
+				connect_node(root, &root->right, tail);
 				_size++;
 				return(iterator(root));
 			}

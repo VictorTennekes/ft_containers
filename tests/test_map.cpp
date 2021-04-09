@@ -21,101 +21,55 @@
 # define VALUE_TYPE int
 # define KEY 'z'
 
-// int main(void) {
-// 	map<KEY_TYPE, VALUE_TYPE> test;
+template <class Container>
+void print_map(Container& cont, std::string name) {
+  std::cout << name << " ";
+	std::cout << "[";
+	for (typename Container::iterator it = cont.begin(); it != cont.end();)
+		std::cout << SIDE << it->first << ":" << it->second << RESET << (++it != cont.end() ? ", " : "");
+	std::cout << "]" << std::endl << std::endl;
+}
 
-// 	test[KEY] = 53060;
-// 	map<KEY_TYPE, VALUE_TYPE>::iterator it = test.find(KEY);
-// 	std::cout << "Key: " << it->first << std::endl << "Value: " << it->second << std::endl;
-// 	test[KEY] = 420;
-// 	std::cout << "Key: " << it->first << std::endl << "Value: " << it->second << std::endl;
-// 	std::cout << test.size() << std::endl;
-// }
+template <class Container>
+void print_map_reverse(Container& cont, std::string name) {
+  std::cout << name << " ";
+	std::cout << "[";
+	for (typename Container::reverse_iterator it = cont.rbegin(); it != cont.rend();)
+		std::cout << SIDE << it->first << ":" << it->second << RESET << (++it != cont.rend() ? ", " : "");
+	std::cout << "]" << std::endl << std::endl;
+}
 
-// accessing mapped values
-// #include <iostream>
-// #include <map>
-// #include <string>
-// #include <map.hpp>
-// #include <test_header.hpp>
+int main(void) {
+  print_env();
+  print_container_title("Map");
 
-// int main ()
-// {
-// 	map<char,int> mymap;
+  // INITIALIZERS
+  print_title_saber("Map initializers/iterators checks");
 
-// 	std::cout << mymap.size() << std::endl;
-// 	std::cout << mymap.empty() << std::endl;
-// 	std::cout << mymap.max_size() << std::endl;
+	map<KEY_TYPE, VALUE_TYPE> mymap;
 
-// 	for (char it = 'a'; it <= 'z'; it++)
-// 		mymap[it] = (it - 96) * 100;
+	for (char it = 'a'; it <= 'z'; it++)
+		mymap[it] = (it - 96) * 100;
+  map<KEY_TYPE, VALUE_TYPE> mymaprev(mymap.rbegin(), mymap.rend());
+  map<KEY_TYPE, VALUE_TYPE> mymapcpy(mymap);
+  print_map(mymap, "MyMap");
+  print_map(mymaprev, "MyMapRev");
+  print_map(mymapcpy, "MyMapCpy");
 
-// 	for (map<char, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
-// 		std::cout << it->first << " => " << it->second << std::endl;
+  // CAPACITY
+  print_title_saber("Map capacity checks");
+  std::cout << "MyMap is {" << (mymap.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
+  std:: cout << mymap.size() << std::endl;
+  std::cout << "Cleared MyMap" << std::endl;
+  mymap.clear();
+  print_map(mymap, "MyMap");
+  std::cout << "MyMap is {" << (mymap.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
+  std::cout << std::endl;
 
-// 	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
-// 	mymap.clear();
-// 	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
-	
-// 	for (char it = 'a'; it <= 'z'; it++)
-// 		mymap[it] = (it - 96) * 100;
+	// std::cout << mymap.size() << std::endl;
+	// std::cout << mymap.empty() << std::endl;
+	// std::cout << mymap.max_size() << std::endl;
 
-// 	for (map<char, int>::reverse_iterator it = mymap.rbegin(); it != mymap.rend(); it++)
-// 		std::cout << it->first << " => " << it->second << std::endl;
-// 	std::cout << "mymap now contains " << mymap.size() << " elements.\n";
 
-// 	std::cout << mymap.count('a') << std::endl;
-// 	return 0;
-// }
-
-// erasing from map
-#include <iostream>
-#include <unistd.h>
-#include <map>
-
-// int main ()
-// {
-//   map<char,int> mymap;
-//   map<char,int>::iterator it;
-
-//   // insert some values:
-//   mymap['a']=10;
-//   mymap['b']=20;
-//   mymap['c']=30;
-//   mymap['d']=40;
-//   mymap['e']=50;
-//   mymap['f']=60;
-
-//   it=mymap.find('b');
-//   mymap.erase (it);                   // erasing by iterator
-
-//   mymap.erase ('c');                  // erasing by key
-
-//   it=mymap.find ('e');
-//   mymap.erase ( it, mymap.end() );    // erasing by range
-
-//   // show content:
-//   for (it=mymap.begin(); it!=mymap.end(); ++it)
-//     std::cout << it->first << " => " << it->second << '\n';
-
-//   return 0;
-// }
-
-int main ()
-{
-  int psize;
-  map<char,int> mymap;
-  pair<const char,int>* p;
-
-  // allocate an array of 5 elements using mymap's allocator:
-  p=mymap.get_allocator().allocate(5);
-
-  // assign some values to array
-  psize = sizeof(std::map<char,int>::value_type)*5;
-
-  std::cout << "The allocated array has a size of " << psize << " bytes.\n";
-
-  mymap.get_allocator().deallocate(p,5);
-
-  return 0;
+	return 0;
 }
