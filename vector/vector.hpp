@@ -166,6 +166,10 @@ namespace ft {
 				return(_data[n]);
 			}
 
+			const_reference operator[] (size_type n) const {
+				return(_data[n]);
+			}
+
 			T& at(size_type n) {
 				if (n >= _size)
 					throw std::out_of_range("out of range");

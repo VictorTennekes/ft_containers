@@ -66,10 +66,50 @@ int main(void) {
   std::cout << "MyMap is {" << (mymap.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
   std::cout << std::endl;
 
-	// std::cout << mymap.size() << std::endl;
-	// std::cout << mymap.empty() << std::endl;
-	// std::cout << mymap.max_size() << std::endl;
+	std::cout << "MyMap has a size of: " << mymap.size() << std::endl;
+	std::cout << "MyMap has a max_size of: " << mymap.max_size() << std::endl;
 
+  // Modifiers
+  print_title_saber("Map modifier checks");
+  std::cout << "Insert 'a' till 'z' in mymap" << std::endl;
+	for (char it = 'a'; it <= 'z'; it++)
+    mymap.insert(ft::pair<KEY_TYPE, VALUE_TYPE>(it, (it - 96) * 100));
+  print_map(mymap, "MyMap");
+  mymapcpy.clear();
+  mymapcpy.insert(mymap.find('d'), mymap.find('x'));
+  print_map(mymapcpy, "MyMapCpy");
+
+  mymapcpy.erase('e');
+  print_map(mymapcpy, "MyMapCpy");
+
+  map<KEY_TYPE, VALUE_TYPE>::iterator it = mymapcpy.find('f');
+  mymapcpy.erase(it);
+  print_map(mymapcpy, "MyMapCpy");
+
+  std::cout << "Swapping contents MyMap and MyMapCpy" << std::endl;
+  mymap.swap(mymapcpy);
+  print_map(mymap, "MyMap");
+  print_map(mymapcpy, "MyMapCpy");
+
+  // Operations
+  print_title_saber("Map operation checks");
+  std::cout << "Does MyMap include 'a': " << (mymap.count('a') == 1 ? GREEN "Yes" : RED "No") << RESET << std::endl;
+  std::cout << "Does MyMapCpy include 'a': " << (mymapcpy.count('a') == 1 ? GREEN "Yes" : RED "No") << RESET << std::endl;
+
+  it = mymapcpy.lower_bound('d');
+  std::cout << "Lower bound mymapcpy for 'd': " << SIDE << it->first << " => " << it->second << RESET << std::endl;
+  it = mymapcpy.upper_bound('d');
+  std::cout << "Upper bound mymapcpy for 'd': " << SIDE << it->first << " => " << it->second << RESET << std::endl;
+
+  pair<map<char,int>::iterator,map<char,int>::iterator> ret;
+  ret = mymapcpy.equal_range('d');
+
+  std::cout << "lower bound points to: ";
+  std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+  std::cout << "upper bound points to: ";
+  std::cout << ret.second->first << " => " << ret.second->second << '\n';
 
 	return 0;
 }
+

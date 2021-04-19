@@ -352,6 +352,14 @@ namespace ft {
 			}
 
 		private:
+			void delete_root(node *pos) {
+				reset_node_pos(head);
+				reset_node_pos(tail);
+				head->parent = tail;
+				tail->parent = head;
+				delete (pos);
+			}
+
 			void delete_node(node *pos) {
 				node **child_ptr = pos->parent->right == pos ? &pos->parent->right : &pos->parent->left;
 				*child_ptr = NULL;
@@ -382,6 +390,8 @@ namespace ft {
 
 			void delete_two_children(node *pos) {
 				node *rep = replacement(pos, true);
+				if (rep == tail)
+					return delete_root(pos);
 				node **child_ptr;
 				if (pos->parent)
 					child_ptr = pos->parent->right == pos ? &pos->parent->right : &pos->parent->left;
@@ -430,12 +440,12 @@ namespace ft {
 
 			void erase (iterator first, iterator last) {
 				bool has_root = false;
-				for (; first != last; first++) {
-					if (first.ptr == root)
+				for (; first != last;) {
+					if (first == iterator(root))
 						has_root = true;
-					erase(first);
+					erase(first++);
 				}
-				if (has_root)
+				if (has_root && last != iterator(root))
 					erase(iterator(root));
 			}
 
@@ -510,11 +520,11 @@ namespace ft {
 			}
 
 			ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const {
-				ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+				return (ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k)));
 			}
 
 			ft::pair<iterator, iterator> equal_range(const key_type& k) {
-				ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+				return (ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k)));
 			}
 
 			allocator_type get_allocator() const {
@@ -522,6 +532,12 @@ namespace ft {
 			}
 
 		private:
+			void reset_node_pos(node *target) {
+				target->parent = NULL;
+				target->left = NULL;
+				target->right = NULL;
+			}
+
 			void		connect_node(node *parent, node **parent_childptr, node *child) {
 				if (child)
 					child->parent = parent;

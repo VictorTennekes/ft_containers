@@ -153,8 +153,7 @@ void print_title(std::string name) {
 }
 
 template <typename Container>
-void	comparison_operator_container(Container a, Container b, std::string a_title, std::string b_title)
-{
+void	comparison_operator_container(Container a, Container b, std::string a_title, std::string b_title) {
 	std::cout << "----------------------------------------------------------------------" << std::endl;
 	std::cout << a_title << YELLOW << " operator == " << RESET << b_title << " = " << ((a == b) ? GREEN "True" : RED "False") << RESET << std::endl;
 	std::cout << a_title << YELLOW << " operator != " << RESET << b_title << " = " << ((a != b) ? GREEN "True" : RED "False") << RESET << std::endl;
