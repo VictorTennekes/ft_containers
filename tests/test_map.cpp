@@ -44,7 +44,7 @@ int main(void) {
   print_container_title("Map");
 
   // INITIALIZERS
-  print_title_saber("Map initializers/iterators checks");
+  print_title_saber("Initializers/iterators");
 
 	map<KEY_TYPE, VALUE_TYPE> mymap;
 
@@ -57,7 +57,7 @@ int main(void) {
   print_map(mymapcpy, "MyMapCpy");
 
   // CAPACITY
-  print_title_saber("Map capacity checks");
+  print_title_saber("Capacity");
   std::cout << "MyMap is {" << (mymap.empty() ? RED "empty" : GREEN "filled") << RESET << "}" << std::endl;
   std:: cout << mymap.size() << std::endl;
   std::cout << "Cleared MyMap" << std::endl;
@@ -70,7 +70,7 @@ int main(void) {
 	std::cout << "MyMap has a max_size of: " << mymap.max_size() << std::endl;
 
   // Modifiers
-  print_title_saber("Map modifier checks");
+  print_title_saber("Modifiers");
   std::cout << "Insert 'a' till 'z' in mymap" << std::endl;
 	for (char it = 'a'; it <= 'z'; it++)
     mymap.insert(ft::pair<KEY_TYPE, VALUE_TYPE>(it, (it - 96) * 100));
@@ -92,7 +92,7 @@ int main(void) {
   print_map(mymapcpy, "MyMapCpy");
 
   // Operations
-  print_title_saber("Map operation checks");
+  print_title_saber("Operations");
   std::cout << "Does MyMap include 'a': " << (mymap.count('a') == 1 ? GREEN "Yes" : RED "No") << RESET << std::endl;
   std::cout << "Does MyMapCpy include 'a': " << (mymapcpy.count('a') == 1 ? GREEN "Yes" : RED "No") << RESET << std::endl;
 
@@ -110,6 +110,8 @@ int main(void) {
   std::cout << "upper bound points to: ";
   std::cout << ret.second->first << " => " << ret.second->second << '\n';
 
+  print_title_saber("Operators");
+  comparison_operator_container(mymap, mymapcpy, "MyMap", "MyMapCpy");
 	return 0;
 }
 

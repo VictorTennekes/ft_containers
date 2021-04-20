@@ -18,8 +18,10 @@ CPPFLAGS	=	-Wall -Wextra -Werror -pedantic -ansi -std=c++98
 CPP			=	clang++
 
 # CONTAINERS
-# CONTAINERS = list vector map
-CONTAINERS = map
+CONTAINERS = list vector map stack queue
+# CONTAINERS = list stack queue
+
+INCL = $(CONTAINERS:%=-I ./%)
 
 # COLORS
 WHITE   = \x1b[37;01m
@@ -39,7 +41,7 @@ all: $(CONTAINERS)
 
 $(CONTAINERS):
 	@echo "$(WHITE)/-----    Compiling $(NAME)_$@     -----\\ $(RESET)"
-	$(CPP) $(CPPFLAGS) tests/test_$@.cpp -o test_$@ -I iterators -I traits -I utils -I tests -I $@
+	$(CPP) $(CPPFLAGS) tests/test_$@.cpp -o test_$@ -I iterators -I traits -I utils -I tests $(INCL)
 
 clean:
 	@echo "$(WHITE)/-----    Cleaning $(NAME)        -----\\ $(RESET)"
