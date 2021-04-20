@@ -15,6 +15,7 @@
 #include <stack.hpp>
 #include <stack>
 #include <test_header.hpp>
+#include <cstdlib>
 
 template <class Type>
 Type	generate_key()

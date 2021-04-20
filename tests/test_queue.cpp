@@ -15,6 +15,7 @@
 #include <queue.hpp>
 #include <queue>
 #include <test_header.hpp>
+#include <cstdlib>
 
 template <class Type>
 Type	generate_key()
