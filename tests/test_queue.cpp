@@ -82,7 +82,7 @@ void	queue_info(const Container& c, std::string title)
 int main(void)
 {
 	print_env();
-	print_title_saber("Queue");
+	print_container_title("Queue");
 
 	// INITIALIZERS
 	print_title_saber("Initializers");

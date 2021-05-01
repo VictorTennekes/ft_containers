@@ -73,7 +73,7 @@ int main(void) {
   print_title_saber("Modifiers");
   std::cout << "Insert 'a' till 'z' in mymap" << std::endl;
 	for (char it = 'a'; it <= 'z'; it++)
-    mymap.insert(ft::pair<KEY_TYPE, VALUE_TYPE>(it, (it - 96) * 100));
+    mymap.insert(pair<KEY_TYPE, VALUE_TYPE>(it, (it - 96) * 100));
   print_map(mymap, "MyMap");
   mymapcpy.clear();
   mymapcpy.insert(mymap.find('d'), mymap.find('x'));

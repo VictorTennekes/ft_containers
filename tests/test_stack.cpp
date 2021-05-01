@@ -74,7 +74,7 @@ void	empty_stack(Container& c)
 
 int main(void) {
 	print_env();
-	print_title_saber("Stack");
+	print_container_title("Stack");
 
 	// INITIALIZERS
 	print_title_saber("Initializers");
