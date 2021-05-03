@@ -13,8 +13,6 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <vector>
-
 # include <memory>
 # include <limits>
 # include <cmath>
@@ -93,7 +91,6 @@ namespace ft {
 			}
 
 			// Iterators
-
 			iterator begin() {
 				return(iterator(_data));
 			}
@@ -127,7 +124,6 @@ namespace ft {
 			}
 
 			// Capacity
-
 			size_type size() const {
 				return(_size);
 			}
@@ -161,7 +157,6 @@ namespace ft {
 			}
 
 			// Element access
-
 			reference operator[] (size_type n) {
 				return(_data[n]);
 			}
@@ -200,9 +195,9 @@ namespace ft {
 
 			// Modifiers
 			template<class InputIterator>
-			void assign(InputIterator first, InputIterator last,
-					typename iterator_traits<InputIterator>::type* = 0) {
+			void assign(InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0) {
 				size_type len = ft::distance(first, last);
+
 				if (len > _capacity)
 					reallocate(len);
 				for (size_t i = 0; first != last; first++, i++)
@@ -232,6 +227,7 @@ namespace ft {
 
 			iterator insert(iterator position, const value_type& val) {
 				size_type pos = ft::distance(begin(), position);
+
 				reallocate(_size + 1, pos, 1);
 				_alloc.construct(&_data[pos], val);
 				_size++;
@@ -241,7 +237,6 @@ namespace ft {
 			void insert(iterator position, size_type n, const value_type& val) {
 				size_type pos = ft::distance(begin(), position);
 				
-				
 				reallocate(_size + n, pos, n);
 				for (size_type i = pos; i < pos + n; i++)
 					_alloc.construct(&_data[i], val);
@@ -249,8 +244,7 @@ namespace ft {
 			}
 
 			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last,
-				typename iterator_traits<InputIterator>::type* = 0) {
+			void insert(iterator position, InputIterator first, InputIterator last, typename iterator_traits<InputIterator>::type* = 0) {
 				size_type pos = ft::distance(begin(), position);
 				size_type n = ft::distance(first, last);
 				
@@ -305,9 +299,9 @@ namespace ft {
 			void reallocate(size_type new_cap, size_type pos = std::string::npos, size_type gap = 0, bool erase = false) {
 				T*			new_data = _alloc.allocate(new_cap);
 				size_type	j = pos;
+				size_type i = 0;
 
 				_capacity = new_cap;
-				size_type i = 0;
 				for (; i < pos && i < _size; i++)
 					_alloc.construct(&new_data[i], _data[i]);
 				erase == true ? i += gap : j += gap;
