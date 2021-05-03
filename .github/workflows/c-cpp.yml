@@ -12,9 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make
+      run: make re
     - name: make std
-      run: make STD=1
+      run: make re STD=1
 
   macos_build:
 
@@ -23,6 +23,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make
+      run: make re
     - name: make std
-      run: make STD=1e
+      run: make re STD=1e
