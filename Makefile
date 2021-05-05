@@ -43,9 +43,10 @@ all: $(CONTAINERS)
 tests/%.o: tests/%.cpp
 	$(CC) -c $(CFLAGS) -I iterators -I traits -I utils -I tests $(INCL) $< -o $@
 
-$(CONTAINERS) : $(OBJ)
+.SECONDEXPANSION:
+$(CONTAINERS) : tests/$$@.o
 	@echo "$(WHITE)/-----    Compiling $@     	-----\\ $(RESET)"
-	$(CC) $(CFLAGS) $(INCL) -I iterators -I traits -I utils -I tests $< -o $@
+	$(CC) $(CFLAGS) $(INCL) -I iterators -I traits -I utils -I tests tests/$@.o -o $@
 
 clean:
 	@echo "$(WHITE)/-----    Cleaning $(NAME)        	-----\\ $(RESET)"

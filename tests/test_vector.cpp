@@ -69,7 +69,7 @@ int main(void) {
 	std::cout << "Resizing victor 2 to 6" << std::endl;
 	v2.resize(6);
 	std::cout << "Victor 2 has a size of: {" << SIDE << v2.size() << RESET << "}" << std::endl;
-	print_container(v2, "Victor 1");
+	print_container(v2, "Victor 2");
 
 	std::cout << "Victor 2 has a capacity of: {" << SIDE << v2.capacity() << RESET << "}" << std::endl;
 	std::cout << "reserve victor 2 to 16" << std::endl;

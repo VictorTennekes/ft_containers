@@ -134,7 +134,7 @@ namespace ft {
 
 			void resize(size_type n, value_type val = value_type()) {
 				if (n > _capacity)
-					reallocate(n);
+					reallocate(calc_capacity(n));
 				while (n < _size)
 					pop_back();
 				while (n > _size)
